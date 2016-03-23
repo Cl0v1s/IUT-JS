@@ -15,7 +15,7 @@ div.widget
     overflow-y:hidden;
     border-radius: 2px;
     color: rgb(100,100,100);
-    background-color: rgb(50,50,50);
+    background-color: #292F33;
 }
 
 div.widget h1

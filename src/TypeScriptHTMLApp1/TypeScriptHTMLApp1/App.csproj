@@ -30,6 +30,7 @@
     <TypeScriptCompile Include="DateWidget.ts" />
     <TypeScriptCompile Include="MeteoWidget.ts" />
     <TypeScriptCompile Include="PictureWidget.ts" />
+    <TypeScriptCompile Include="TwitterWidget.ts" />
     <TypeScriptCompile Include="Widget.ts" />
     <TypeScriptCompile Include="WidgetManager.ts" />
   </ItemGroup>
