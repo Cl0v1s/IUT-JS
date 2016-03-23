@@ -9,6 +9,7 @@ var Widget = (function () {
         this.width = 0;
         this.height = 0;
         this.move(x, y);
+        this.canScroll(false);
         this.onCreate();
     }
     Widget.prototype.setParent = function (node) {
@@ -47,6 +48,12 @@ var Widget = (function () {
     Widget.prototype.setContent = function (content) {
         this.content.innerHTML = "";
         this.content.appendChild(content);
+    };
+    Widget.prototype.canScroll = function (can) {
+        if (can)
+            this.div.style.overflowY = "auto";
+        else
+            this.div.style.overflowY = "hidden";
     };
     Widget.prototype.onMoving = function () {
         if (this.x < 0)

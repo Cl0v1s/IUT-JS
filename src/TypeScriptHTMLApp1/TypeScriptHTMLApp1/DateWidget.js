@@ -9,17 +9,24 @@ var DateWidget = (function (_super) {
         _super.apply(this, arguments);
     }
     DateWidget.prototype.onCreate = function () {
+        var _this = this;
         this.width = 250;
         this.height = 110;
+        this.name = "Date et Heure";
+        this.showContent(this);
+        this.timer = setInterval(function () { _this.showContent(_this); }, 5000);
+        _super.prototype.onCreate.call(this);
+    };
+    DateWidget.prototype.showContent = function (self) {
+        console.log("updating...");
         var date = new Date();
-        this.div.innerHTML = "\
-        <h1>Date et Heure</h1>\
-        <div class='codehilite'>\
+        self.content.innerHTML = "\
             <span>Nous sommes le <span class='k'>" + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "</span></span><br>\
             <span>Il est <span class='k'>" + date.getHours() + "h" + date.getMinutes() + "min</span></span>\
-        </div>\
         ";
-        _super.prototype.onCreate.call(this);
+    };
+    DateWidget.prototype.onDelete = function () {
+        clearInterval(this.timer);
     };
     return DateWidget;
 }(Widget));

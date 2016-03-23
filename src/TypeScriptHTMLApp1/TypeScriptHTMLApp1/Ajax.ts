@@ -1,5 +1,5 @@
 ﻿class Ajax {
-    static Get(url:string, data?:JSON, callback?:Function, error?:Function): void {
+    static Get(url:string, data?:JSON, callback?:Function, error?:Function, header?:any): void {
         var xhr = new XMLHttpRequest();
 
         xhr.onreadystatechange = function () {
@@ -17,6 +17,11 @@
             }
         }
         xhr.open('GET', url);
+        if (header != undefined) {
+            for (var key in header) {
+                xhr.setRequestHeader(key, header[key]);
+            }
+        }
         if (data != undefined && data != null)
             xhr.send(JSON.stringify(data));
         else

@@ -64,6 +64,7 @@ class WidgetManager {
         public unregisterWidget(widget: Widget): boolean {
             for (var i: number = 0; i != this.widgets.length; i++) {
                 if (this.widgets[i] == widget) {
+                    this.widgets[i].onDelete();
                     this.widgets.splice(i);
                     return true;
                 }

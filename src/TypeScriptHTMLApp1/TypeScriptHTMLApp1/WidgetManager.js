@@ -52,6 +52,7 @@ var WidgetManager = (function () {
     WidgetManager.prototype.unregisterWidget = function (widget) {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] == widget) {
+                this.widgets[i].onDelete();
                 this.widgets.splice(i);
                 return true;
             }

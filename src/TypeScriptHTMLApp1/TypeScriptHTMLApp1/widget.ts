@@ -20,6 +20,7 @@
         this.width = 0;
         this.height = 0;
         this.move(x, y);
+        this.canScroll(false);
         this.onCreate();
     }
 
@@ -66,6 +67,13 @@
     setContent(content: HTMLElement): void {
         this.content.innerHTML = "";
         this.content.appendChild(content);
+    }
+
+    canScroll(can: boolean): void {
+        if (can)
+            this.div.style.overflowY = "auto";
+        else
+            this.div.style.overflowY = "hidden";
     }
 
     onMoving(): void {
