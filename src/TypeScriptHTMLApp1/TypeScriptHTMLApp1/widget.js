@@ -2,6 +2,8 @@ var Widget = (function () {
     function Widget(x, y) {
         this.name = "";
         this.div = document.createElement("div");
+        this.content = document.createElement("div");
+        this.content.classList.add("codehilite");
         this.div.classList.add("widget");
         this.style = document.createElement("style");
         this.width = 0;
@@ -42,6 +44,10 @@ var Widget = (function () {
     Widget.prototype.onDelete = function () {
         this.div.parentElement.removeChild(this.div);
     };
+    Widget.prototype.setContent = function (content) {
+        this.content.innerHTML = "";
+        this.content.appendChild(content);
+    };
     Widget.prototype.onMoving = function () {
         if (this.x < 0)
             this.x = 0;
@@ -56,7 +62,8 @@ var Widget = (function () {
         this.onUpdate();
     };
     Widget.prototype.onUpdate = function () {
-        this.div.id = this.name;
+        this.div.innerHTML = "<h1>" + this.name + "</h1>";
+        this.div.appendChild(this.content);
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";
         this.div.style.left = this.x.toString() + "px";
@@ -65,3 +72,4 @@ var Widget = (function () {
     };
     return Widget;
 }());
+//# sourceMappingURL=widget.js.map

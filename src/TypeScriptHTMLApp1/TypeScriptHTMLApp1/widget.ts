@@ -2,6 +2,7 @@
 
     public parent: HTMLElement;
     public div: HTMLDivElement;
+    public content: HTMLDivElement;
     public x: number;
     public y: number;
     public width: number;
@@ -12,6 +13,8 @@
     constructor(x:number, y:number) {
         this.name = "";
         this.div = document.createElement("div");
+        this.content = document.createElement("div");
+        this.content.classList.add("codehilite");
         this.div.classList.add("widget");
         this.style = document.createElement("style");
         this.width = 0;
@@ -60,6 +63,11 @@
         this.div.parentElement.removeChild(this.div);
     }
 
+    setContent(content: HTMLElement): void {
+        this.content.innerHTML = "";
+        this.content.appendChild(content);
+    }
+
     onMoving(): void {
         if (this.x < 0)
             this.x = 0;
@@ -76,7 +84,8 @@
     }
 
     onUpdate(): void {
-        this.div.id = this.name;
+        this.div.innerHTML = "<h1>" + this.name + "</h1>";
+        this.div.appendChild(this.content);
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";
         this.div.style.left = this.x.toString() + "px";
