@@ -1,8 +1,12 @@
-﻿class MeteoWidget extends Widget {
+﻿/// <reference path="widget.ts"/>
+/// <reference path="Ajax.ts"/>
+
+class MeteoWidget extends Widget {
 
 
     onCreate() : void
     {
+        this.name = "widget-meteo";
         this.width = 300;
         this.height = 200;
         this.div.innerHTML = "<h1>Meteo</h1>";
@@ -24,8 +28,6 @@
         var city: string;
         var input: HTMLInputElement = <HTMLInputElement>document.getElementById("widget-meteo-name");
         city = input.value;
-        var self = <HTMLButtonElement>this;
-        console.log("Envoi de " + city);
         Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, function(res)
         {
             var data: any = JSON.parse(res);
@@ -36,10 +38,11 @@
                 Humidité: <span class='k'>"+ data.main.humidity + "</span><br>\
                 Descriptio: <span class='k'>"+data.weather[0].description+"</span>\
             ";
-            console.log(self.parentElement.parentElement);
-            this.parent.parentElement.innerHTML = "<h1>Meteo</h1>";
-            this.parent.parentElement.appendChild(div);
-            
+            var parent = document.getElementById("widget-meteo");
+            if (parent != undefined) {
+                parent.innerHTML = "<h1>Meteo</h1>";
+                parent.appendChild(div);
+            }
         });
         
     }

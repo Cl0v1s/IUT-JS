@@ -7,8 +7,10 @@
     public width: number;
     public height: number;
     public style: HTMLStyleElement;
+    public name: string;
 
     constructor(x:number, y:number) {
+        this.name = "";
         this.div = document.createElement("div");
         this.div.classList.add("widget");
         this.style = document.createElement("style");
@@ -74,6 +76,7 @@
     }
 
     onUpdate(): void {
+        this.div.id = this.name;
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";
         this.div.style.left = this.x.toString() + "px";

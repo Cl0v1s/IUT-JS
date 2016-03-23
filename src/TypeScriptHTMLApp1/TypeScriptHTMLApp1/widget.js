@@ -1,5 +1,6 @@
-﻿var Widget = (function () {
+var Widget = (function () {
     function Widget(x, y) {
+        this.name = "";
         this.div = document.createElement("div");
         this.div.classList.add("widget");
         this.style = document.createElement("style");
@@ -12,42 +13,35 @@
         this.parent = node;
         this.parent.appendChild(this.div);
     };
-
     Widget.prototype.onCreate = function () {
         this.onUpdate();
     };
-
     Widget.prototype.getPosition = function () {
         var res = new Array();
         res["x"] = this.x;
         res["y"] = this.y;
         return res;
     };
-
     Widget.prototype.move = function (x, y) {
         this.x = x;
         this.y = y;
         this.onMoving();
     };
-
     Widget.prototype.getSize = function () {
         var res = new Array();
         res["w"] = this.width;
         res["h"] = this.height;
         return res;
     };
-
     Widget.prototype.onCollid = function (other) {
         if (this.x + this.width >= other.x && this.x <= other.x + other.width && this.y + this.height >= other.y && this.y <= other.y + other.height) {
             return true;
         }
         return false;
     };
-
     Widget.prototype.onDelete = function () {
         this.div.parentElement.removeChild(this.div);
     };
-
     Widget.prototype.onMoving = function () {
         if (this.x < 0)
             this.x = 0;
@@ -59,11 +53,10 @@
             this.x = this.parent.clientWidth - this.width;
         if (this.y + this.height > this.parent.clientHeight)
             this.y = this.parent.clientHeight - this.height;
-
         this.onUpdate();
     };
-
     Widget.prototype.onUpdate = function () {
+        this.div.id = this.name;
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";
         this.div.style.left = this.x.toString() + "px";
@@ -71,5 +64,4 @@
         this.div.style.height = this.height.toString() + "px";
     };
     return Widget;
-})();
-//# sourceMappingURL=widget.js.map
+}());
