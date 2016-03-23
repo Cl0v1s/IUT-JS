@@ -28,7 +28,7 @@ var PictureWidget = (function (_super) {
     };
     PictureWidget.prototype.formClick = function (self) {
         var _this = this;
-        var search = document.getElementsByTagName("input")[0].value;
+        var search = this.content.getElementsByTagName("input")[0].value;
         if (search == undefined || search == "")
             return;
         //rechercher l'api

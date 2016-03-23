@@ -23,7 +23,7 @@ class PictureWidget extends Widget
 
 	formClick(self : PictureWidget) : void
 	{
-        var search: string = (<HTMLInputElement>document.getElementsByTagName("input")[0]).value;
+        var search: string = (<HTMLInputElement>this.content.getElementsByTagName("input")[0]).value;
         if (search == undefined || search == "")
             return;
 		//rechercher l'api

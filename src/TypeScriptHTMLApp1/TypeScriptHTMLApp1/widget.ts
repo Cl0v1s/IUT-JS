@@ -14,6 +14,7 @@
         this.name = "";
         this.div = document.createElement("div");
         this.content = document.createElement("div");
+        this.content.style.position = "relative";
         this.content.classList.add("codehilite");
         this.div.classList.add("widget");
         this.style = document.createElement("style");
@@ -22,6 +23,12 @@
         this.move(x, y);
         this.canScroll(false);
         this.onCreate();
+    }
+
+    setSize(w: number, h: number): void {
+        this.width = w;
+        this.height = h;
+        this.onUpdate();
     }
 
     setParent(node: HTMLElement) {

@@ -3,6 +3,7 @@ var Widget = (function () {
         this.name = "";
         this.div = document.createElement("div");
         this.content = document.createElement("div");
+        this.content.style.position = "relative";
         this.content.classList.add("codehilite");
         this.div.classList.add("widget");
         this.style = document.createElement("style");
@@ -12,6 +13,11 @@ var Widget = (function () {
         this.canScroll(false);
         this.onCreate();
     }
+    Widget.prototype.setSize = function (w, h) {
+        this.width = w;
+        this.height = h;
+        this.onUpdate();
+    };
     Widget.prototype.setParent = function (node) {
         this.parent = node;
         this.parent.appendChild(this.div);

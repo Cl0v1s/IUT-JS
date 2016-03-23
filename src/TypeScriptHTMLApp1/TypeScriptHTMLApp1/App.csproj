@@ -33,6 +33,7 @@
     <TypeScriptCompile Include="TwitterWidget.ts" />
     <TypeScriptCompile Include="Widget.ts" />
     <TypeScriptCompile Include="WidgetManager.ts" />
+    <TypeScriptCompile Include="YoutubeWidget.ts" />
   </ItemGroup>
   <ItemGroup>
     <None Include="web.Debug.config">

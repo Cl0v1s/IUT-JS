@@ -4,7 +4,7 @@
 
     constructor(root:HTMLElement) {
         this.manager = new WidgetManager(root);
-        var test: Widget = new TwitterWidget(300, 0);
+        var test: Widget = new YoutubeWidget(300, 0);
         this.manager.registerWidget(test);
     }
 

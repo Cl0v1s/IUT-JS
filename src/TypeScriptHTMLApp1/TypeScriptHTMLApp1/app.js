@@ -1,7 +1,7 @@
 var App = (function () {
     function App(root) {
         this.manager = new WidgetManager(root);
-        var test = new TwitterWidget(300, 0);
+        var test = new YoutubeWidget(300, 0);
         this.manager.registerWidget(test);
     }
     return App;
