@@ -48,6 +48,7 @@
     }
 
     move(x: number, y: number): void {
+        console.log("to :" + x + " " + y);
         this.x = x;
         this.y = y;
         this.onMoving();
@@ -84,7 +85,7 @@
     }
 
     onMoving(): void {
-        if (this.x < 0)
+        /*if (this.x < 0)
             this.x = 0;
         if (this.y < 0)
             this.y = 0;
@@ -94,7 +95,7 @@
             this.x = this.parent.clientWidth - this.width;
         if (this.y + this.height > this.parent.clientHeight)
             this.y = this.parent.clientHeight - this.height;
-
+        */
         this.onUpdate();
     }
 
@@ -107,6 +108,13 @@
         this.div.style.width = this.width.toString()+"px";
         this.div.style.height = this.height.toString() + "px";
         
+    }
+
+    public getCenter() {
+        var res: Array<number> = new Array();
+        res["x"] = this.x + this.width /2;
+        res["y"] = this.y + this.height/2;
+        return res;
     }
 
 }

@@ -10,44 +10,37 @@ var WidgetManager = (function () {
         }
         widget.setParent(this.node);
         this.widgets.push(widget);
-        this.organize();
+        this.organize(widget);
         return true;
     };
-    WidgetManager.prototype.organize = function () {
-        var done = true;
+    WidgetManager.prototype.organize = function (widget) {
         for (var i = 0; i != this.widgets.length; i++) {
-            for (var u = 0; u != this.widgets.length; u++) {
-                if (this.widgets[i] == this.widgets[u] || this.widgets[i] == undefined || this.widgets[u] == undefined)
-                    continue;
-                if (this.widgets[i].onCollid(this.widgets[u])) {
-                    //Correction de l'intersection horizontale
-                    //Collision par la gauche
-                    var intersect = this.widgets[u].getPosition()["x"] + this.widgets[u].getSize()["w"] - this.widgets[i].getPosition()["x"];
-                    if (intersect > 0) {
-                        this.widgets[i].move(this.widgets[i].getPosition()["x"] + intersect, 0);
+            var other = this.widgets[i];
+            if (other == widget)
+                continue;
+            if (other.onCollid(widget)) {
+                var x = other.getCenter()["x"] - widget.getCenter()["x"];
+                var y = other.getCenter()["y"] - widget.getCenter()["y"];
+                if (Math.abs(x) > Math.abs(y)) {
+                    console.log("x");
+                    if (x > 0) {
+                        widget.move(other.getPosition()["x"] - widget.getSize()["w"] - 5, widget.getPosition()["y"]);
                     }
-                    //Collision par la droite
-                    intersect = this.widgets[i].getPosition()["x"] + this.widgets[i].getSize()["w"] - this.widgets[u].getPosition()["x"];
-                    if (intersect > 0) {
-                        this.widgets[i].move(this.widgets[i].getPosition()["x"] + intersect, 0);
+                    else {
+                        widget.move(other.getPosition()["x"] + other.getSize()["w"] + 5, widget.getPosition()["y"]);
                     }
-                    //Correction de l'intersection verticale
-                    //Collision par le haut
-                    var intersect = this.widgets[u].getPosition()["y"] + this.widgets[u].getSize()["h"] - this.widgets[i].getPosition()["y"];
-                    if (intersect > 0) {
-                        this.widgets[i].move(0, this.widgets[i].getPosition()["y"] + intersect);
+                }
+                else {
+                    console.log("y");
+                    if (y > 0) {
+                        widget.move(widget.getPosition()["x"], other.getPosition()["y"] - widget.getSize()["h"] - 5);
                     }
-                    //Collision par la droite
-                    intersect = this.widgets[i].getPosition()["y"] + this.widgets[i].getSize()["h"] - this.widgets[u].getPosition()["y"];
-                    if (intersect > 0) {
-                        this.widgets[i].move(0, this.widgets[i].getPosition()["y"] + intersect);
+                    else {
+                        widget.move(widget.getPosition()["x"], other.getPosition()["y"] + other.getSize()["h"] + 5);
                     }
-                    done = false;
                 }
             }
         }
-        if (done == false)
-            this.organize();
     };
     WidgetManager.prototype.unregisterWidget = function (widget) {
         for (var i = 0; i != this.widgets.length; i++) {

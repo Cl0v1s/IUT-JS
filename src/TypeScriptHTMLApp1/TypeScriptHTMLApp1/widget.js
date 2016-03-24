@@ -32,6 +32,7 @@ var Widget = (function () {
         return res;
     };
     Widget.prototype.move = function (x, y) {
+        console.log("to :" + x + " " + y);
         this.x = x;
         this.y = y;
         this.onMoving();
@@ -62,7 +63,7 @@ var Widget = (function () {
             this.div.style.overflowY = "hidden";
     };
     Widget.prototype.onMoving = function () {
-        if (this.x < 0)
+        /*if (this.x < 0)
             this.x = 0;
         if (this.y < 0)
             this.y = 0;
@@ -72,6 +73,7 @@ var Widget = (function () {
             this.x = this.parent.clientWidth - this.width;
         if (this.y + this.height > this.parent.clientHeight)
             this.y = this.parent.clientHeight - this.height;
+        */
         this.onUpdate();
     };
     Widget.prototype.onUpdate = function () {
@@ -82,6 +84,12 @@ var Widget = (function () {
         this.div.style.left = this.x.toString() + "px";
         this.div.style.width = this.width.toString() + "px";
         this.div.style.height = this.height.toString() + "px";
+    };
+    Widget.prototype.getCenter = function () {
+        var res = new Array();
+        res["x"] = this.x + this.width / 2;
+        res["y"] = this.y + this.height / 2;
+        return res;
     };
     return Widget;
 }());

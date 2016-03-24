@@ -12,13 +12,14 @@ var MeteoWidget = (function (_super) {
     }
     MeteoWidget.prototype.onCreate = function () {
         this.name = "Meteo";
-        this.width = 300;
-        this.height = 200;
+        this.width = 250;
+        this.height = 70;
         this.showForm();
         _super.prototype.onCreate.call(this);
     };
     MeteoWidget.prototype.showForm = function () {
         var _this = this;
+        this.setSize(250, 70);
         var div = document.createElement("div");
         div.innerHTML = "<input type='text' placeholder='Nom de la ville...'>";
         var sub = document.createElement("button");
@@ -28,23 +29,33 @@ var MeteoWidget = (function (_super) {
         this.setContent(div);
     };
     MeteoWidget.prototype.formClick = function (self) {
+        var _this = this;
         var city;
         var input = this.content.getElementsByTagName("input")[0];
         city = input.value;
         Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, function (res) {
-            var data = JSON.parse(res);
-            var div = document.createElement("div");
-            div.innerHTML = "\
+            _this.handleData(res);
+        });
+    };
+    MeteoWidget.prototype.handleData = function (res) {
+        var _this = this;
+        this.setSize(250, 160);
+        var data = JSON.parse(res);
+        var div = document.createElement("div");
+        div.innerHTML = "\
                 C°: <span class='k'>" + data.main.temp + "</span><br>\
                 Humidité: <span class='k'>" + data.main.humidity + "</span><br>\
-                Description: <span class='k'>" + data.weather[0].description + "</span><br>\
+                Description: <span class='k'>" + data.weather[0].description + "</span><br><br>\
             ";
-            var back = document.createElement("button");
-            back.innerHTML = "Retour";
-            back.addEventListener("click", function () { self.showForm(); });
-            div.appendChild(back);
-            self.setContent(div);
-        });
+        var back = document.createElement("button");
+        back.innerHTML = "Retour";
+        back.addEventListener("click", function () { _this.showForm(); });
+        back.style.width = "100px";
+        back.style.display = "block";
+        back.style.marginLeft = "auto";
+        back.style.marginRight = "auto";
+        div.appendChild(back);
+        this.setContent(div);
     };
     return MeteoWidget;
 }(Widget));
