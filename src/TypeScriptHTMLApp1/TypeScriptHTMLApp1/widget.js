@@ -1,7 +1,12 @@
 var Widget = (function () {
     function Widget(x, y) {
+        var _this = this;
         this.name = "";
         this.div = document.createElement("div");
+        this.div.draggable = true;
+        this.div.onmousedown = function () {
+            App.manager.setMoving(_this);
+        };
         this.content = document.createElement("div");
         this.content.style.position = "relative";
         this.content.classList.add("codehilite");
@@ -49,6 +54,12 @@ var Widget = (function () {
         }
         return false;
     };
+    Widget.prototype.contains = function (x, y) {
+        if (this.x + this.width >= x && this.x <= x && this.y + this.height >= y && this.y <= y) {
+            return true;
+        }
+        return false;
+    };
     Widget.prototype.onDelete = function () {
         this.div.parentElement.removeChild(this.div);
     };
@@ -63,7 +74,7 @@ var Widget = (function () {
             this.div.style.overflowY = "hidden";
     };
     Widget.prototype.onMoving = function () {
-        /*if (this.x < 0)
+        if (this.x < 0)
             this.x = 0;
         if (this.y < 0)
             this.y = 0;
@@ -73,7 +84,6 @@ var Widget = (function () {
             this.x = this.parent.clientWidth - this.width;
         if (this.y + this.height > this.parent.clientHeight)
             this.y = this.parent.clientHeight - this.height;
-        */
         this.onUpdate();
     };
     Widget.prototype.onUpdate = function () {
@@ -93,4 +103,4 @@ var Widget = (function () {
     };
     return Widget;
 }());
-//# sourceMappingURL=widget.js.map
+//# sourceMappingURL=Widget.js.map

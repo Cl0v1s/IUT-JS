@@ -13,6 +13,10 @@
     constructor(x:number, y:number) {
         this.name = "";
         this.div = document.createElement("div");
+        this.div.draggable = true;
+        this.div.onmousedown = () => {
+            App.manager.setMoving(this);
+        };
         this.content = document.createElement("div");
         this.content.style.position = "relative";
         this.content.classList.add("codehilite");
@@ -68,6 +72,13 @@
         return false;
     }
 
+    contains(x:number, y: number): boolean {
+        if (this.x + this.width >= x && this.x <= x && this.y + this.height >= y && this.y <= y) {
+            return true;
+        }
+        return false;
+    }
+
     onDelete(): void {
         this.div.parentElement.removeChild(this.div);
     }
@@ -85,7 +96,7 @@
     }
 
     onMoving(): void {
-        /*if (this.x < 0)
+        if (this.x < 0)
             this.x = 0;
         if (this.y < 0)
             this.y = 0;
@@ -95,7 +106,7 @@
             this.x = this.parent.clientWidth - this.width;
         if (this.y + this.height > this.parent.clientHeight)
             this.y = this.parent.clientHeight - this.height;
-        */
+        
         this.onUpdate();
     }
 

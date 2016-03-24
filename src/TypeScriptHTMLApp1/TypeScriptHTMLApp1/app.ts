@@ -1,14 +1,17 @@
 ﻿class App {
 
-    manager: WidgetManager;
+    static manager: WidgetManager;
 
     constructor(root:HTMLElement) {
-        this.manager = new WidgetManager(root);
+        App.manager = new WidgetManager(root);
         var test: Widget = new SportWidget(300, 0);
         var test1: Widget = new MeteoWidget(401, 0);
+        var test2: Widget = new MeteoWidget(501, 0);
 
-        this.manager.registerWidget(test);
-        this.manager.registerWidget(test1);
+
+        App.manager.registerWidget(test);
+        App.manager.registerWidget(test1);
+        App.manager.registerWidget(test2);
 
     }
 
