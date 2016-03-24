@@ -1,6 +1,7 @@
 var Widget = (function () {
     function Widget(x, y) {
         var _this = this;
+        this.fixed = false;
         this.name = "";
         this.div = document.createElement("div");
         this.div.draggable = true;
@@ -18,10 +19,17 @@ var Widget = (function () {
         this.canScroll(false);
         this.onCreate();
     }
+    Widget.prototype.intersects = function (x, y, w, h) {
+        if (this.x + this.width >= x && this.x <= x + w && this.y + this.height >= y && this.y <= y + h) {
+            return true;
+        }
+        return false;
+    };
     Widget.prototype.setSize = function (w, h) {
         this.width = w;
         this.height = h;
         this.onUpdate();
+        App.manager.organize(this);
     };
     Widget.prototype.setParent = function (node) {
         this.parent = node;
@@ -61,7 +69,9 @@ var Widget = (function () {
         return false;
     };
     Widget.prototype.onDelete = function () {
-        this.div.parentElement.removeChild(this.div);
+        console.log("cleaning");
+        if (this.div != undefined && this.parent != undefined)
+            this.parent.removeChild(this.div);
     };
     Widget.prototype.setContent = function (content) {
         this.content.innerHTML = "";
@@ -74,20 +84,52 @@ var Widget = (function () {
             this.div.style.overflowY = "hidden";
     };
     Widget.prototype.onMoving = function () {
-        if (this.x < 0)
-            this.x = 0;
-        if (this.y < 0)
-            this.y = 0;
-        if (this.parent == undefined)
-            return;
-        if (this.x + this.width > this.parent.clientWidth)
-            this.x = this.parent.clientWidth - this.width;
-        if (this.y + this.height > this.parent.clientHeight)
-            this.y = this.parent.clientHeight - this.height;
+        if (App.manager.moving == this) {
+            if (this.x < 0)
+                this.x = 0;
+            if (this.y < 0)
+                this.y = 0;
+            if (this.parent == undefined)
+                return;
+            if (this.x + this.width > this.parent.clientWidth)
+                this.x = this.parent.clientWidth - this.width;
+            if (this.y + this.height > this.parent.clientHeight)
+                this.y = this.parent.clientHeight - this.height;
+        }
+        else {
+            if (this.parent == undefined)
+                return;
+            if (this.x < 0)
+                this.x = this.parent.clientWidth - this.width;
+            if (this.y < 0)
+                this.y = this.parent.clientHeight - this.height;
+            if (this.x + this.width > this.parent.clientWidth)
+                this.x = 0;
+            if (this.y + this.height > this.parent.clientHeight)
+                this.y = 0;
+        }
         this.onUpdate();
     };
+    Widget.prototype.closeWidget = function () {
+        console.log("ok");
+        App.manager.unregisterWidget(this);
+        this.parent.removeChild(this.div);
+    };
     Widget.prototype.onUpdate = function () {
-        this.div.innerHTML = "<h1>" + this.name + "</h1>";
+        var _this = this;
+        this.div.innerHTML = "";
+        var title = document.createElement("h1");
+        title.innerHTML = this.name;
+        if (this.fixed == false) {
+            var close = document.createElement("button");
+            close.innerHTML = "X";
+            close.classList.add("close");
+            close.onclick = function () {
+                _this.closeWidget();
+            };
+            title.appendChild(close);
+        }
+        this.div.appendChild(title);
         this.div.appendChild(this.content);
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";
@@ -103,4 +145,4 @@ var Widget = (function () {
     };
     return Widget;
 }());
-//# sourceMappingURL=Widget.js.map
+//# sourceMappingURL=widget.js.map

@@ -29,6 +29,7 @@
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="DateWidget.ts" />
     <TypeScriptCompile Include="MapsWidget.ts" />
+    <TypeScriptCompile Include="MenuWidget.ts" />
     <TypeScriptCompile Include="MeteoWidget.ts" />
     <TypeScriptCompile Include="PictureWidget.ts" />
     <TypeScriptCompile Include="SportWidget.ts" />

@@ -9,8 +9,10 @@
     public height: number;
     public style: HTMLStyleElement;
     public name: string;
+    public fixed: boolean;
 
-    constructor(x:number, y:number) {
+    constructor(x: number, y: number) {
+        this.fixed = false;
         this.name = "";
         this.div = document.createElement("div");
         this.div.draggable = true;
@@ -29,10 +31,19 @@
         this.onCreate();
     }
 
+    intersects(x: number, y: number, w: number,  h: number) : boolean {
+        if (this.x + this.width >= x && this.x <= x + w && this.y + this.height >= y && this.y <= y + h) {
+            return true;
+        }
+        return false;
+    }
+
     setSize(w: number, h: number): void {
         this.width = w;
         this.height = h;
         this.onUpdate();
+        App.manager.organize(this);
+
     }
 
     setParent(node: HTMLElement) {
@@ -79,8 +90,10 @@
         return false;
     }
 
-    onDelete(): void {
-        this.div.parentElement.removeChild(this.div);
+    public onDelete(): void {
+        console.log("cleaning");
+        if(this.div != undefined && this.parent != undefined)
+            this.parent.removeChild(this.div);
     }
 
     setContent(content: HTMLElement): void {
@@ -96,22 +109,56 @@
     }
 
     onMoving(): void {
-        if (this.x < 0)
-            this.x = 0;
-        if (this.y < 0)
-            this.y = 0;
-        if (this.parent == undefined)
-            return;
-        if (this.x + this.width > this.parent.clientWidth)
-            this.x = this.parent.clientWidth - this.width;
-        if (this.y + this.height > this.parent.clientHeight)
-            this.y = this.parent.clientHeight - this.height;
+        if (App.manager.moving == this) {
+
+            if (this.x < 0)
+                this.x = 0;
+            if (this.y < 0)
+                this.y = 0;
+            if (this.parent == undefined)
+                return;
+            if (this.x + this.width > this.parent.clientWidth)
+                this.x = this.parent.clientWidth - this.width;
+            if (this.y + this.height > this.parent.clientHeight)
+                this.y = this.parent.clientHeight - this.height;
+        }
+        else {
+            if (this.parent == undefined)
+                return;
+            if (this.x < 0)
+                this.x = this.parent.clientWidth - this.width;
+            if (this.y < 0)
+                this.y = this.parent.clientHeight - this.height;
+            if (this.x + this.width > this.parent.clientWidth)
+                this.x = 0;
+            if (this.y + this.height > this.parent.clientHeight)
+                this.y = 0;
+        }
         
         this.onUpdate();
     }
 
+    closeWidget(): void {
+        console.log("ok");
+        App.manager.unregisterWidget(this);
+        this.parent.removeChild(this.div);
+    }
+
     onUpdate(): void {
-        this.div.innerHTML = "<h1>" + this.name + "</h1>";
+        this.div.innerHTML = "";
+        var title: HTMLElement = document.createElement("h1");
+        title.innerHTML = this.name;
+        if (this.fixed == false) {
+
+            var close: HTMLButtonElement = document.createElement("button");
+            close.innerHTML = "X";
+            close.classList.add("close");
+            close.onclick = () => {
+                this.closeWidget();
+            };
+            title.appendChild(close);
+        }
+        this.div.appendChild(title);
         this.div.appendChild(this.content);
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";

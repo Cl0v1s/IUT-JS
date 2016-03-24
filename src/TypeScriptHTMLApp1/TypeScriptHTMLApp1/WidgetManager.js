@@ -11,6 +11,13 @@ var WidgetManager = (function () {
             _this.onDragStop();
         };
     }
+    WidgetManager.prototype.exists = function (clas) {
+        for (var i = 0; i != this.widgets.length; i++) {
+            if (this.widgets[i] instanceof clas)
+                return true;
+        }
+        return false;
+    };
     WidgetManager.prototype.onDragStop = function () {
         if (this.moving != undefined) {
             this.organize(this.moving);
@@ -18,6 +25,27 @@ var WidgetManager = (function () {
             this.moving.div.style.zIndex = "0";
         }
         this.moving = undefined;
+    };
+    WidgetManager.prototype.getFreeZone = function (w, h) {
+        var object = { x: null, y: null };
+        for (var i = 0; i != this.node.clientWidth - w; i++) {
+            for (var u = 0; u != this.node.clientHeight - h; u++) {
+                for (var p = 0; p != this.widgets.length; p++) {
+                    if (this.widgets[i].intersects(i, u, w, h) == false) {
+                        object.x = i;
+                        object.y = u;
+                        break;
+                    }
+                }
+                if (object.x != null)
+                    break;
+            }
+            if (object.x != null)
+                break;
+        }
+        if (object.x != null)
+            return object;
+        return null;
     };
     WidgetManager.prototype.onDragOver = function (e) {
         if (this.moving == undefined) {
@@ -28,7 +56,8 @@ var WidgetManager = (function () {
         this.moving.move(e.pageX - this.moving.width / 2, e.pageY - this.moving.height / 2);
     };
     WidgetManager.prototype.setMoving = function (moving) {
-        this.moving = moving;
+        if (moving.fixed == false)
+            this.moving = moving;
     };
     WidgetManager.prototype.registerWidget = function (widget) {
         for (var i = 0; i != this.widgets.length; i++) {
@@ -73,7 +102,7 @@ var WidgetManager = (function () {
         }
         if (moved) {
             for (var i = 0; i != this.widgets.length; i++) {
-                if (this.widgets[i] != widget)
+                if (this.widgets[i] != widget && this.widgets[i].fixed == false)
                     this.organize(this.widgets[i]);
             }
         }
@@ -81,14 +110,25 @@ var WidgetManager = (function () {
     WidgetManager.prototype.unregisterWidget = function (widget, del) {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] == widget) {
-                if (del == undefined || del == true)
+                if (del == undefined || del == null || del == true) {
+                    console.log("trying clean");
                     this.widgets[i].onDelete();
+                }
                 this.widgets.splice(i);
                 return true;
             }
         }
         return false;
     };
+    WidgetManager.Widgets = [
+        DateWidget,
+        PictureWidget,
+        SportWidget,
+        TwitterWidget,
+        YoutubeWidget,
+        MapsWidget,
+        MeteoWidget,
+    ];
     return WidgetManager;
 }());
 //# sourceMappingURL=WidgetManager.js.map

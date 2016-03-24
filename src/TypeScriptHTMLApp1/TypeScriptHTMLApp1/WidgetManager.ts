@@ -5,7 +5,17 @@ class WidgetManager {
 
         private widgets: Array<Widget>;
         private node: HTMLElement;
-        private moving: Widget; 
+        public moving: Widget;
+
+        static Widgets = [
+            DateWidget, 
+            PictureWidget, 
+            SportWidget,
+            TwitterWidget, 
+            YoutubeWidget,
+            MapsWidget, 
+            MeteoWidget,
+        ];
 
         constructor(node: HTMLElement) {
             this.moving = undefined;
@@ -19,6 +29,14 @@ class WidgetManager {
             };
         }
 
+        public exists(clas: any): boolean {
+            for (var i = 0; i != this.widgets.length; i++) {
+                if (this.widgets[i] instanceof clas)
+                    return true;
+            }
+            return false;
+        }
+
         private onDragStop(): void {
             if (this.moving != undefined) {
                 this.organize(this.moving);
@@ -26,6 +44,27 @@ class WidgetManager {
                 this.moving.div.style.zIndex = "0";
             }
             this.moving = undefined;
+        }
+
+        public getFreeZone(w: number, h: number): any {
+            var object = { x: null, y: null };
+            for (var i = 0; i != this.node.clientWidth - w; i++) {
+                for (var u = 0; u != this.node.clientHeight - h; u++) {
+                    for (var p = 0; p != this.widgets.length; p++) {
+                        if (this.widgets[i].intersects(i, u, w, h) == false) {
+                            object.x = i; object.y = u;
+                            break;
+                        }
+                    }
+                    if (object.x != null)
+                        break;
+                }
+                if (object.x != null)
+                    break;
+            }
+            if (object.x != null)
+                return object;
+            return null;
         }
 
         private onDragOver(e): void {
@@ -39,7 +78,8 @@ class WidgetManager {
         }
 
         public setMoving(moving: Widget) {
-            this.moving = moving;
+            if(moving.fixed == false)
+                this.moving = moving;
         }
 
 
@@ -54,7 +94,7 @@ class WidgetManager {
             return true;
         }
 
-        private organize(widget: Widget): void {
+        public organize(widget: Widget): void {
             var moved: boolean = false;
             for (var i: number = 0; i != this.widgets.length; i++) {
                 var other: Widget = this.widgets[i];
@@ -89,7 +129,7 @@ class WidgetManager {
             }
             if (moved) {
                 for (var i = 0; i != this.widgets.length; i++) {
-                    if(this.widgets[i] != widget)
+                    if (this.widgets[i] != widget && this.widgets[i].fixed == false)
                         this.organize(this.widgets[i]);
                 }
 
@@ -99,9 +139,12 @@ class WidgetManager {
         public unregisterWidget(widget: Widget, del?:boolean): boolean {
             for (var i: number = 0; i != this.widgets.length; i++) {
                 if (this.widgets[i] == widget) {
-                    if(del == undefined || del == true)
+                    if (del == undefined || del == null || del == true) {
+                        console.log("trying clean");
                         this.widgets[i].onDelete();
+                    }
                     this.widgets.splice(i);
+
                     return true;
                 }
             }
