@@ -1,7 +1,7 @@
 var App = (function () {
     function App(root) {
         this.manager = new WidgetManager(root);
-        var test = new MapsWidget(300, 0);
+        var test = new SportWidget(300, 0);
         this.manager.registerWidget(test);
     }
     return App;

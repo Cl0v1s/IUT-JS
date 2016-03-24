@@ -11,8 +11,10 @@
                 }
                 else {
 
-                    if (callback != undefined && callback != null)
+                    if (error != undefined && error != null)
                         error(xhr.statusText);
+                    else
+                        console.log(xhr);
                 }
             }
         }

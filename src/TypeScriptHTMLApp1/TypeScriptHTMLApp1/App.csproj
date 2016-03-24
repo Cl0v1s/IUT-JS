@@ -31,6 +31,7 @@
     <TypeScriptCompile Include="MapsWidget.ts" />
     <TypeScriptCompile Include="MeteoWidget.ts" />
     <TypeScriptCompile Include="PictureWidget.ts" />
+    <TypeScriptCompile Include="SportWidget.ts" />
     <TypeScriptCompile Include="TwitterWidget.ts" />
     <TypeScriptCompile Include="Widget.ts" />
     <TypeScriptCompile Include="WidgetManager.ts" />

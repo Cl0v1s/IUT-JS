@@ -4,7 +4,7 @@
 
     constructor(root:HTMLElement) {
         this.manager = new WidgetManager(root);
-        var test: Widget = new MapsWidget(300, 0);
+        var test: Widget = new SportWidget(300, 0);
         this.manager.registerWidget(test);
     }
 
