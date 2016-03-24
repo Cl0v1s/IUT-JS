@@ -16,6 +16,7 @@ div.widget
     border-radius: 2px;
     color: rgb(100,100,100);
     background-color: #292F33;
+    transition: all ease 0.2s;
 }
 
 div.widget h1

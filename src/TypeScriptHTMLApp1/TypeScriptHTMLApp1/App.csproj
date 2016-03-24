@@ -28,6 +28,7 @@
     <TypeScriptCompile Include="Ajax.ts" />
     <TypeScriptCompile Include="app.ts" />
     <TypeScriptCompile Include="DateWidget.ts" />
+    <TypeScriptCompile Include="MapsWidget.ts" />
     <TypeScriptCompile Include="MeteoWidget.ts" />
     <TypeScriptCompile Include="PictureWidget.ts" />
     <TypeScriptCompile Include="TwitterWidget.ts" />

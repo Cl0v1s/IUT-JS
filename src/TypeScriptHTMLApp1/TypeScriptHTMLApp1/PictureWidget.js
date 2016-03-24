@@ -10,14 +10,15 @@ var PictureWidget = (function (_super) {
         _super.apply(this, arguments);
     }
     PictureWidget.prototype.onCreate = function () {
-        this.width = 250;
-        this.height = 400;
+        this.width = 350;
+        this.height = 70;
         this.name = "Photo";
         this.showForm();
         _super.prototype.onCreate.call(this);
     };
     PictureWidget.prototype.showForm = function () {
         var _this = this;
+        this.setSize(350, 70);
         var div = document.createElement("div");
         div.innerHTML = "<input type='text' placeholder='Entrez un mot-clef'>";
         var button = document.createElement("button");
@@ -54,6 +55,7 @@ var PictureWidget = (function (_super) {
     };
     PictureWidget.prototype.showPicture = function (picture) {
         var _this = this;
+        this.setSize(250, 400);
         this.canScroll(true);
         var div = document.createElement("div");
         div.style.textAlign = "center";

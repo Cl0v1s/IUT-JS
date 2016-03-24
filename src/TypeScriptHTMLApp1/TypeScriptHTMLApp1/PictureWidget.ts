@@ -4,14 +4,15 @@ class PictureWidget extends Widget
 {
 	onCreate() : void
 	{
-		this.width = 250;
-		this.height = 400;
+        this.width = 350;
+        this.height = 70;
         this.name = "Photo";
         this.showForm();
 		super.onCreate();
     }
 
     showForm(): void {
+        this.setSize(350, 70);
         var div: HTMLDivElement = document.createElement("div");
         div.innerHTML = "<input type='text' placeholder='Entrez un mot-clef'>";
         var button: HTMLButtonElement = document.createElement("button");
@@ -51,6 +52,7 @@ class PictureWidget extends Widget
     }
 
     showPicture(picture: any) {
+        this.setSize(250, 400);
         this.canScroll(true);
         var div: HTMLDivElement = document.createElement("div");
         div.style.textAlign = "center";
