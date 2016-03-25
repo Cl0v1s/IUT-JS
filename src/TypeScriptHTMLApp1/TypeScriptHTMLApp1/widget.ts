@@ -1,4 +1,9 @@
-﻿class Widget {
+﻿/// <reference path="app.ts"/>
+/// <reference path="Ajax.ts"/>
+
+
+
+class Widget {
 
     public parent: HTMLElement;
     public div: HTMLDivElement;
@@ -20,7 +25,8 @@
         this.name = "";
         this.div = document.createElement("div");
         this.div.draggable = true;
-        this.div.onmousedown = () => {
+        this.div.onmousedown = (e) => {
+            e.stopPropagation();
             App.manager.setMoving(this);
         };
         this.content = document.createElement("div");
@@ -153,6 +159,18 @@
 
     closeWidget(): void {
         App.manager.unregisterWidget(this);
+    }
+
+    onStartMoving() : void
+    {
+
+
+    }
+
+    onStopMoving() : void
+    {
+
+        
     }
 
     onUpdate(): void {

@@ -1,3 +1,5 @@
+/// <reference path="app.ts"/>
+/// <reference path="Ajax.ts"/>
 var Widget = (function () {
     function Widget(x, y) {
         var _this = this;
@@ -7,7 +9,8 @@ var Widget = (function () {
         this.name = "";
         this.div = document.createElement("div");
         this.div.draggable = true;
-        this.div.onmousedown = function () {
+        this.div.onmousedown = function (e) {
+            e.stopPropagation();
             App.manager.setMoving(_this);
         };
         this.content = document.createElement("div");
@@ -122,6 +125,10 @@ var Widget = (function () {
     Widget.prototype.closeWidget = function () {
         App.manager.unregisterWidget(this);
     };
+    Widget.prototype.onStartMoving = function () {
+    };
+    Widget.prototype.onStopMoving = function () {
+    };
     Widget.prototype.onUpdate = function () {
         var _this = this;
         this.div.innerHTML = "";
@@ -152,4 +159,3 @@ var Widget = (function () {
     };
     return Widget;
 }());
-//# sourceMappingURL=widget.js.map

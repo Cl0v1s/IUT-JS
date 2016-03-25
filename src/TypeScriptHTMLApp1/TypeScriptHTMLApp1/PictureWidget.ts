@@ -16,7 +16,7 @@ class PictureWidget extends Widget
         var div: HTMLDivElement = document.createElement("div");
         div.innerHTML = "<input type='text' placeholder='Entrez un mot-clef'>";
         var button: HTMLButtonElement = document.createElement("button");
-        button.innerText = "Chercher";
+        button.innerHTML = "Chercher";
         button.addEventListener('click', () => { this.formClick(this); });
         div.appendChild(button);
         this.setContent(div);

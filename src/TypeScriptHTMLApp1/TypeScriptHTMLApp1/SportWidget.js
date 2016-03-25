@@ -43,4 +43,3 @@ var SportWidget = (function (_super) {
     };
     return SportWidget;
 }(Widget));
-//# sourceMappingURL=SportWidget.js.map

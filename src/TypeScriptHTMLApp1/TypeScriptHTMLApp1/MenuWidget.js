@@ -58,4 +58,3 @@ var MenuWidget = (function (_super) {
     };
     return MenuWidget;
 }(Widget));
-//# sourceMappingURL=MenuWidget.js.map

@@ -1,4 +1,8 @@
-﻿class App {
+﻿/// <reference path="MenuWidget.ts"/>
+/// <reference path="WidgetManager.ts"/>
+
+
+class App {
 
     static manager: WidgetManager;
 

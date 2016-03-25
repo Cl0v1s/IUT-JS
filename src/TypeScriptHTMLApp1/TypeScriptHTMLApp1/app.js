@@ -1,3 +1,5 @@
+/// <reference path="MenuWidget.ts"/>
+/// <reference path="WidgetManager.ts"/>
 var App = (function () {
     function App(root) {
         App.manager = new WidgetManager(root);
@@ -9,4 +11,3 @@ var App = (function () {
 window.onload = function () {
     var app = new App(document.getElementById("content"));
 };
-//# sourceMappingURL=app.js.map

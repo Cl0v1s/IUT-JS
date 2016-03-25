@@ -23,4 +23,3 @@ var TwitterWidget = (function (_super) {
     };
     return TwitterWidget;
 }(Widget));
-//# sourceMappingURL=TwitterWidget.js.map

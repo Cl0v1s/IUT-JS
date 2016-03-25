@@ -1,3 +1,4 @@
+/// <reference path="widget.ts"/>
 var __extends = (this && this.__extends) || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
@@ -56,6 +57,12 @@ var YoutubeWidget = (function (_super) {
         }
         this.showVideo(video);
     };
+    YoutubeWidget.prototype.onStartMoving = function () {
+        this.content.style.display = "none";
+    };
+    YoutubeWidget.prototype.onStopMoving = function () {
+        this.content.style.display = "block";
+    };
     YoutubeWidget.prototype.showVideo = function (video) {
         var _this = this;
         console.log(video);
@@ -74,4 +81,3 @@ var YoutubeWidget = (function (_super) {
     };
     return YoutubeWidget;
 }(Widget));
-//# sourceMappingURL=YoutubeWidget.js.map

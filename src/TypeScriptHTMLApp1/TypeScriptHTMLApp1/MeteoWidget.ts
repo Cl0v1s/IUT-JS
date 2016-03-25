@@ -7,14 +7,14 @@ class MeteoWidget extends Widget {
     onCreate() : void
     {
         this.name = "Meteo";
-        this.width = 250;
+        this.width = 350;
         this.height = 70;
         this.showForm();
         super.onCreate();
     }
 
     showForm(): void {
-        this.setSize(250, 70);
+        this.setSize(350, 70);
         var div: HTMLDivElement = document.createElement("div");
         div.innerHTML = "<input type='text' placeholder='Nom de la ville...'>";
         var sub: HTMLButtonElement = document.createElement("button");
@@ -36,10 +36,18 @@ class MeteoWidget extends Widget {
     }
 
     handleData(res: string): void {
-        this.setSize(250, 160);
         var data: any = JSON.parse(res);
+        if(data.weather == undefined)
+        {
+            alert('Impossible de trouver le lieu demande');
+            return;
+        }
+        this.setSize(350, 180);
+        console.log(data);
         var div: HTMLElement = document.createElement("div");
         div.innerHTML = "\
+                <center><img src='http://openweathermap.org/img/w/"+data.weather[0].icon+".png'></center>\
+                Lieu: <span class='k'>"+data.name+"</span><br>\
                 C°: <span class='k'>"+ data.main.temp + "</span><br>\
                 Humidité: <span class='k'>"+ data.main.humidity + "</span><br>\
                 Description: <span class='k'>"+ data.weather[0].description + "</span><br><br>\

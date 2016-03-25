@@ -22,7 +22,7 @@ var PictureWidget = (function (_super) {
         var div = document.createElement("div");
         div.innerHTML = "<input type='text' placeholder='Entrez un mot-clef'>";
         var button = document.createElement("button");
-        button.innerText = "Chercher";
+        button.innerHTML = "Chercher";
         button.addEventListener('click', function () { _this.formClick(_this); });
         div.appendChild(button);
         this.setContent(div);
@@ -81,4 +81,3 @@ var PictureWidget = (function (_super) {
     };
     return PictureWidget;
 }(Widget));
-//# sourceMappingURL=PictureWidget.js.map

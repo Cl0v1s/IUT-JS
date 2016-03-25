@@ -1,4 +1,7 @@
-﻿class YoutubeWidget extends Widget {
+﻿/// <reference path="widget.ts"/>
+
+
+class YoutubeWidget extends Widget {
 
     onCreate(): void {
         this.name = "Youtube";
@@ -49,6 +52,16 @@
         }
 
         this.showVideo(video);
+    }
+
+    onStartMoving() : void
+    {
+        this.content.style.display = "none";
+    }
+
+    onStopMoving() : void
+    {
+        this.content.style.display = "block";
     }
 
     showVideo(video: any): void {

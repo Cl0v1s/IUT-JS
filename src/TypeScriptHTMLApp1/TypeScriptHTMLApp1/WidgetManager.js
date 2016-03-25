@@ -1,3 +1,10 @@
+/// <reference path="DateWidget.ts"/>
+/// <reference path="PictureWidget.ts"/>
+/// <reference path="SportWidget.ts"/>
+/// <reference path="TwitterWidget.ts"/>
+/// <reference path="YoutubeWidget.ts"/>
+/// <reference path="MapsWidget.ts"/>
+/// <reference path="MeteoWidget.ts"/>
 var WidgetManager = (function () {
     function WidgetManager(node) {
         var _this = this;
@@ -45,6 +52,7 @@ var WidgetManager = (function () {
             this.organize(this.moving);
             this.moving.div.style.transitionProperty = "all";
             this.moving.div.style.zIndex = "0";
+            this.moving.onStopMoving();
         }
         this.moving = undefined;
     };
@@ -60,12 +68,13 @@ var WidgetManager = (function () {
             return;
         }
         this.moving.div.style.transitionProperty = "none";
+        this.moving.onStartMoving();
         this.moving.div.style.zIndex = "100";
         this.moving.conflicts.forEach(function (other) {
             if (other != _this.moving && other.fixed == false)
                 _this.organize(other);
         });
-        this.moving.move(e.pageX - this.moving.width / 2, e.pageY - this.moving.height / 2);
+        this.moving.move(e.pageX, e.pageY);
     };
     WidgetManager.prototype.setMoving = function (moving) {
         if (moving.fixed == false)
@@ -143,4 +152,3 @@ var WidgetManager = (function () {
     ];
     return WidgetManager;
 }());
-//# sourceMappingURL=WidgetManager.js.map
