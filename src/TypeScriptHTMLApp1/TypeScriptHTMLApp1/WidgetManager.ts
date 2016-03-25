@@ -53,7 +53,7 @@ class WidgetManager {
 
         public update() {
             this.widgets.forEach((widget: Widget) => {
-                if (widget.fixed == false) {
+                if (widget.fixed == false && this.moving != widget) {
                     if (this.organize(widget))
                         widget.counter++;
                     else
@@ -69,7 +69,10 @@ class WidgetManager {
 
         private onDragStop(): void {
             if (this.moving != undefined) {
-                this.organize(this.moving);
+                this.moving.conflicts.forEach((other: Widget) => {
+                    if (other != this.moving && other.fixed == false)
+                        this.organize(other);
+                });
                 this.moving.div.style.transitionProperty = "all";
                 this.moving.div.style.zIndex = "0";
                 this.moving.onStopMoving();
@@ -91,10 +94,7 @@ class WidgetManager {
             this.moving.div.style.transitionProperty = "none";
             this.moving.onStartMoving();
             this.moving.div.style.zIndex = "100";
-            this.moving.conflicts.forEach((other: Widget) => {
-                if (other != this.moving && other.fixed == false)
-                    this.organize(other);
-            });
+  
             this.moving.move(e.pageX, e.pageY);
         }
 

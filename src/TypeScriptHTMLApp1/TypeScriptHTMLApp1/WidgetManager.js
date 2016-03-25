@@ -34,7 +34,7 @@ var WidgetManager = (function () {
     WidgetManager.prototype.update = function () {
         var _this = this;
         this.widgets.forEach(function (widget) {
-            if (widget.fixed == false) {
+            if (widget.fixed == false && _this.moving != widget) {
                 if (_this.organize(widget))
                     widget.counter++;
                 else
@@ -48,8 +48,12 @@ var WidgetManager = (function () {
         });
     };
     WidgetManager.prototype.onDragStop = function () {
+        var _this = this;
         if (this.moving != undefined) {
-            this.organize(this.moving);
+            this.moving.conflicts.forEach(function (other) {
+                if (other != _this.moving && other.fixed == false)
+                    _this.organize(other);
+            });
             this.moving.div.style.transitionProperty = "all";
             this.moving.div.style.zIndex = "0";
             this.moving.onStopMoving();
@@ -63,17 +67,12 @@ var WidgetManager = (function () {
         return object;
     };
     WidgetManager.prototype.onDragOver = function (e) {
-        var _this = this;
         if (this.moving == undefined) {
             return;
         }
         this.moving.div.style.transitionProperty = "none";
         this.moving.onStartMoving();
         this.moving.div.style.zIndex = "100";
-        this.moving.conflicts.forEach(function (other) {
-            if (other != _this.moving && other.fixed == false)
-                _this.organize(other);
-        });
         this.moving.move(e.pageX, e.pageY);
     };
     WidgetManager.prototype.setMoving = function (moving) {
