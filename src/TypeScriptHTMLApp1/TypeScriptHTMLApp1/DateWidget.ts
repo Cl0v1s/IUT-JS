@@ -23,5 +23,6 @@
 
     onDelete(): void {
         clearInterval(this.timer);
+        super.onDelete();
     }
 }; 

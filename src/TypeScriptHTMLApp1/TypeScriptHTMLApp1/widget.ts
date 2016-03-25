@@ -10,8 +10,12 @@
     public style: HTMLStyleElement;
     public name: string;
     public fixed: boolean;
+    public conflicts: Array<Widget>;
+    public counter: number;
 
     constructor(x: number, y: number) {
+        this.counter = 0;
+        this.conflicts = new Array();
         this.fixed = false;
         this.name = "";
         this.div = document.createElement("div");
@@ -91,7 +95,6 @@
     }
 
     public onDelete(): void {
-        console.log("cleaning");
         if(this.div != undefined && this.parent != undefined)
             this.parent.removeChild(this.div);
     }
@@ -109,12 +112,22 @@
     }
 
     onMoving(): void {
-        if (App.manager.moving == this) {
+        this.conflicts = new Array();
+        App.manager.getWidgets().forEach((other: Widget) => {
+            if (other != this &&  this.onCollid(other)) {
+                console.log("Conflit de " + this.name + " avec " + other.name);
+                this.conflicts.push(other);
+            }
+        });
+
+
+
+        if (App.manager.moving == this && this.conflicts.length == 0) {
 
             if (this.x < 0)
                 this.x = 0;
-            if (this.y < 0)
-                this.y = 0;
+            if (this.y < 70)
+                this.y = 70;
             if (this.parent == undefined)
                 return;
             if (this.x + this.width > this.parent.clientWidth)
@@ -127,21 +140,19 @@
                 return;
             if (this.x < 0)
                 this.x = this.parent.clientWidth - this.width;
-            if (this.y < 0)
+            if (this.y < 70)
                 this.y = this.parent.clientHeight - this.height;
             if (this.x + this.width > this.parent.clientWidth)
                 this.x = 0;
             if (this.y + this.height > this.parent.clientHeight)
-                this.y = 0;
+                this.y = 70;
         }
         
         this.onUpdate();
     }
 
     closeWidget(): void {
-        console.log("ok");
         App.manager.unregisterWidget(this);
-        this.parent.removeChild(this.div);
     }
 
     onUpdate(): void {

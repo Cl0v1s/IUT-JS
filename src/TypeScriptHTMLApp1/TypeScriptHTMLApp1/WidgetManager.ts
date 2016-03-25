@@ -27,6 +27,13 @@ class WidgetManager {
             this.node.onmouseup = () => {
                 this.onDragStop();
             };
+            setInterval(() => {
+                this.update();
+            }, 50);
+        }
+
+        public getWidgets(): Array<Widget> {
+            return this.widgets;
         }
 
         public exists(clas: any): boolean {
@@ -35,6 +42,22 @@ class WidgetManager {
                     return true;
             }
             return false;
+        }
+
+        public update() {
+            this.widgets.forEach((widget: Widget) => {
+                if (widget.fixed == false) {
+                    if (this.organize(widget))
+                        widget.counter++;
+                    else
+                        widget.counter = 0;
+                    if (widget.counter >= 3) {
+                        var place = this.getRandomZone();
+                        widget.move(place.x, place.y);
+                        widget.counter = 0;
+                    }
+                }
+            });
         }
 
         private onDragStop(): void {
@@ -46,25 +69,11 @@ class WidgetManager {
             this.moving = undefined;
         }
 
-        public getFreeZone(w: number, h: number): any {
+        public getRandomZone(): any {
             var object = { x: null, y: null };
-            for (var i = 0; i != this.node.clientWidth - w; i++) {
-                for (var u = 0; u != this.node.clientHeight - h; u++) {
-                    for (var p = 0; p != this.widgets.length; p++) {
-                        if (this.widgets[i].intersects(i, u, w, h) == false) {
-                            object.x = i; object.y = u;
-                            break;
-                        }
-                    }
-                    if (object.x != null)
-                        break;
-                }
-                if (object.x != null)
-                    break;
-            }
-            if (object.x != null)
-                return object;
-            return null;
+            object.x = Math.floor(Math.random() * this.node.clientWidth);
+            object.y = Math.floor(Math.random() * (this.node.clientHeight - 70)) + 70;
+            return object;
         }
 
         private onDragOver(e): void {
@@ -73,7 +82,10 @@ class WidgetManager {
             }
             this.moving.div.style.transitionProperty = "none";
             this.moving.div.style.zIndex = "100";
-
+            this.moving.conflicts.forEach((other: Widget) => {
+                if (other != this.moving && other.fixed == false)
+                    this.organize(other);
+            });
             this.moving.move(e.pageX-this.moving.width/2, e.pageY-this.moving.height/2);
         }
 
@@ -94,7 +106,8 @@ class WidgetManager {
             return true;
         }
 
-        public organize(widget: Widget): void {
+        public organize(widget: Widget): boolean {
+            
             var moved: boolean = false;
             for (var i: number = 0; i != this.widgets.length; i++) {
                 var other: Widget = this.widgets[i];
@@ -105,7 +118,6 @@ class WidgetManager {
                     var x: number = other.getCenter()["x"] - widget.getCenter()["x"];
                     var y: number = other.getCenter()["y"] - widget.getCenter()["y"];
                     if (Math.abs(x) > Math.abs(y)) {
-                        console.log("x");
                         if (x > 0) {
                             widget.move(other.getPosition()["x"] - widget.getSize()["w"] - 5, widget.getPosition()["y"]);
                         }
@@ -115,7 +127,6 @@ class WidgetManager {
                         }
                     }
                     else {
-                        console.log("y");
 
                         if (y > 0) {
                             widget.move( widget.getPosition()["x"], other.getPosition()["y"] - widget.getSize()["h"] - 5);
@@ -128,12 +139,14 @@ class WidgetManager {
                 }
             }
             if (moved) {
-                for (var i = 0; i != this.widgets.length; i++) {
-                    if (this.widgets[i] != widget && this.widgets[i].fixed == false)
-                        this.organize(this.widgets[i]);
-                }
+                widget.conflicts.forEach((other: Widget) => {
+                    if(other.fixed == false)
+                        this.organize(other);
+                });
 
             }
+            return moved;
+            
         }
 
         public unregisterWidget(widget: Widget, del?:boolean): boolean {

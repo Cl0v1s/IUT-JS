@@ -10,13 +10,35 @@ var WidgetManager = (function () {
         this.node.onmouseup = function () {
             _this.onDragStop();
         };
+        setInterval(function () {
+            _this.update();
+        }, 50);
     }
+    WidgetManager.prototype.getWidgets = function () {
+        return this.widgets;
+    };
     WidgetManager.prototype.exists = function (clas) {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] instanceof clas)
                 return true;
         }
         return false;
+    };
+    WidgetManager.prototype.update = function () {
+        var _this = this;
+        this.widgets.forEach(function (widget) {
+            if (widget.fixed == false) {
+                if (_this.organize(widget))
+                    widget.counter++;
+                else
+                    widget.counter = 0;
+                if (widget.counter >= 3) {
+                    var place = _this.getRandomZone();
+                    widget.move(place.x, place.y);
+                    widget.counter = 0;
+                }
+            }
+        });
     };
     WidgetManager.prototype.onDragStop = function () {
         if (this.moving != undefined) {
@@ -26,33 +48,23 @@ var WidgetManager = (function () {
         }
         this.moving = undefined;
     };
-    WidgetManager.prototype.getFreeZone = function (w, h) {
+    WidgetManager.prototype.getRandomZone = function () {
         var object = { x: null, y: null };
-        for (var i = 0; i != this.node.clientWidth - w; i++) {
-            for (var u = 0; u != this.node.clientHeight - h; u++) {
-                for (var p = 0; p != this.widgets.length; p++) {
-                    if (this.widgets[i].intersects(i, u, w, h) == false) {
-                        object.x = i;
-                        object.y = u;
-                        break;
-                    }
-                }
-                if (object.x != null)
-                    break;
-            }
-            if (object.x != null)
-                break;
-        }
-        if (object.x != null)
-            return object;
-        return null;
+        object.x = Math.floor(Math.random() * this.node.clientWidth);
+        object.y = Math.floor(Math.random() * (this.node.clientHeight - 70)) + 70;
+        return object;
     };
     WidgetManager.prototype.onDragOver = function (e) {
+        var _this = this;
         if (this.moving == undefined) {
             return;
         }
         this.moving.div.style.transitionProperty = "none";
         this.moving.div.style.zIndex = "100";
+        this.moving.conflicts.forEach(function (other) {
+            if (other != _this.moving && other.fixed == false)
+                _this.organize(other);
+        });
         this.moving.move(e.pageX - this.moving.width / 2, e.pageY - this.moving.height / 2);
     };
     WidgetManager.prototype.setMoving = function (moving) {
@@ -70,6 +82,7 @@ var WidgetManager = (function () {
         return true;
     };
     WidgetManager.prototype.organize = function (widget) {
+        var _this = this;
         var moved = false;
         for (var i = 0; i != this.widgets.length; i++) {
             var other = this.widgets[i];
@@ -80,7 +93,6 @@ var WidgetManager = (function () {
                 var x = other.getCenter()["x"] - widget.getCenter()["x"];
                 var y = other.getCenter()["y"] - widget.getCenter()["y"];
                 if (Math.abs(x) > Math.abs(y)) {
-                    console.log("x");
                     if (x > 0) {
                         widget.move(other.getPosition()["x"] - widget.getSize()["w"] - 5, widget.getPosition()["y"]);
                     }
@@ -89,7 +101,6 @@ var WidgetManager = (function () {
                     }
                 }
                 else {
-                    console.log("y");
                     if (y > 0) {
                         widget.move(widget.getPosition()["x"], other.getPosition()["y"] - widget.getSize()["h"] - 5);
                     }
@@ -101,11 +112,12 @@ var WidgetManager = (function () {
             }
         }
         if (moved) {
-            for (var i = 0; i != this.widgets.length; i++) {
-                if (this.widgets[i] != widget && this.widgets[i].fixed == false)
-                    this.organize(this.widgets[i]);
-            }
+            widget.conflicts.forEach(function (other) {
+                if (other.fixed == false)
+                    _this.organize(other);
+            });
         }
+        return moved;
     };
     WidgetManager.prototype.unregisterWidget = function (widget, del) {
         for (var i = 0; i != this.widgets.length; i++) {

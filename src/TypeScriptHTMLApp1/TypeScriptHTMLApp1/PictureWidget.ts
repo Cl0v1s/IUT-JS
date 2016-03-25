@@ -40,7 +40,7 @@ class PictureWidget extends Widget
         var result: any = JSON.parse(data);
         var picture: any = result.data[Math.floor(Math.random() * result.data.length)];
         var counter: number = 0;
-        while (picture == undefined || picture.type == undefined || (picture.type.indexOf("image/") == -1 && counter < 50)) {
+        while (picture == undefined || picture.type == undefined || (picture.type.indexOf("image/") == -1 && counter < 15)) {
             picture = result.data[Math.floor(Math.random() * result.data.length)];
             counter++;
         }

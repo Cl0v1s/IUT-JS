@@ -27,6 +27,7 @@ var DateWidget = (function (_super) {
     };
     DateWidget.prototype.onDelete = function () {
         clearInterval(this.timer);
+        _super.prototype.onDelete.call(this);
     };
     return DateWidget;
 }(Widget));

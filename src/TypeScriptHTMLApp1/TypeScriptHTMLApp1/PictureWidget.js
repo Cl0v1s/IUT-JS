@@ -43,7 +43,7 @@ var PictureWidget = (function (_super) {
         var result = JSON.parse(data);
         var picture = result.data[Math.floor(Math.random() * result.data.length)];
         var counter = 0;
-        while (picture == undefined || picture.type == undefined || (picture.type.indexOf("image/") == -1 && counter < 50)) {
+        while (picture == undefined || picture.type == undefined || (picture.type.indexOf("image/") == -1 && counter < 15)) {
             picture = result.data[Math.floor(Math.random() * result.data.length)];
             counter++;
         }

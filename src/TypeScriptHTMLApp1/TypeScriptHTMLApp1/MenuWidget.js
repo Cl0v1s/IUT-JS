@@ -53,11 +53,7 @@ var MenuWidget = (function (_super) {
             return;
         var object = new WidgetManager.Widgets[index](0, 0);
         App.manager.registerWidget(object);
-        var pos = App.manager.getFreeZone(object.width, object.height);
-        if (pos == null)
-            object.move(window.innerWidth / 2 - object.getSize()["w"] / 2, window.innerHeight / 2 - object.getSize()["h"] / 2);
-        else
-            object.move(pos.x, pos.y);
+        object.move(window.innerWidth / 2 - object.getSize()["w"] / 2, window.innerHeight / 2 - object.getSize()["h"] / 2);
         App.manager.organize(object);
     };
     return MenuWidget;

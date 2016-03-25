@@ -1,6 +1,8 @@
 var Widget = (function () {
     function Widget(x, y) {
         var _this = this;
+        this.counter = 0;
+        this.conflicts = new Array();
         this.fixed = false;
         this.name = "";
         this.div = document.createElement("div");
@@ -69,7 +71,6 @@ var Widget = (function () {
         return false;
     };
     Widget.prototype.onDelete = function () {
-        console.log("cleaning");
         if (this.div != undefined && this.parent != undefined)
             this.parent.removeChild(this.div);
     };
@@ -84,11 +85,19 @@ var Widget = (function () {
             this.div.style.overflowY = "hidden";
     };
     Widget.prototype.onMoving = function () {
-        if (App.manager.moving == this) {
+        var _this = this;
+        this.conflicts = new Array();
+        App.manager.getWidgets().forEach(function (other) {
+            if (other != _this && _this.onCollid(other)) {
+                console.log("Conflit de " + _this.name + " avec " + other.name);
+                _this.conflicts.push(other);
+            }
+        });
+        if (App.manager.moving == this && this.conflicts.length == 0) {
             if (this.x < 0)
                 this.x = 0;
-            if (this.y < 0)
-                this.y = 0;
+            if (this.y < 70)
+                this.y = 70;
             if (this.parent == undefined)
                 return;
             if (this.x + this.width > this.parent.clientWidth)
@@ -101,19 +110,17 @@ var Widget = (function () {
                 return;
             if (this.x < 0)
                 this.x = this.parent.clientWidth - this.width;
-            if (this.y < 0)
+            if (this.y < 70)
                 this.y = this.parent.clientHeight - this.height;
             if (this.x + this.width > this.parent.clientWidth)
                 this.x = 0;
             if (this.y + this.height > this.parent.clientHeight)
-                this.y = 0;
+                this.y = 70;
         }
         this.onUpdate();
     };
     Widget.prototype.closeWidget = function () {
-        console.log("ok");
         App.manager.unregisterWidget(this);
-        this.parent.removeChild(this.div);
     };
     Widget.prototype.onUpdate = function () {
         var _this = this;
