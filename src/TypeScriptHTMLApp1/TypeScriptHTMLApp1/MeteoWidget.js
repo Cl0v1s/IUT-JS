@@ -66,3 +66,4 @@ var MeteoWidget = (function (_super) {
     };
     return MeteoWidget;
 }(Widget));
+//# sourceMappingURL=MeteoWidget.js.map

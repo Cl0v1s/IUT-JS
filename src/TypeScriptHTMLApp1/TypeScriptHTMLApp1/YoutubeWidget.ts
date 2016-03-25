@@ -56,12 +56,17 @@ class YoutubeWidget extends Widget {
 
     onStartMoving() : void
     {
-        this.content.style.display = "none";
+        if(this.content.dataset["state"] != "no-update")
+            this.div.removeChild(this.content);
+        this.content.dataset["state"] = "no-update";
     }
 
     onStopMoving() : void
     {
-        this.content.style.display = "block";
+        if (this.content.dataset["state"] == "no-update")
+            this.div.appendChild(this.content);
+        this.content.dataset["state"] = undefined;
+
     }
 
     showVideo(video: any): void {

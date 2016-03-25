@@ -152,3 +152,4 @@ var WidgetManager = (function () {
     ];
     return WidgetManager;
 }());
+//# sourceMappingURL=WidgetManager.js.map

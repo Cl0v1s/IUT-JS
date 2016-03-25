@@ -50,3 +50,4 @@ var MapsWidget = (function (_super) {
     };
     return MapsWidget;
 }(Widget));
+//# sourceMappingURL=MapsWidget.js.map

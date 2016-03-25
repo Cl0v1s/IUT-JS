@@ -81,3 +81,4 @@ var PictureWidget = (function (_super) {
     };
     return PictureWidget;
 }(Widget));
+//# sourceMappingURL=PictureWidget.js.map

@@ -58,10 +58,14 @@ var YoutubeWidget = (function (_super) {
         this.showVideo(video);
     };
     YoutubeWidget.prototype.onStartMoving = function () {
-        this.content.style.display = "none";
+        if (this.content.dataset["state"] != "no-update")
+            this.div.removeChild(this.content);
+        this.content.dataset["state"] = "no-update";
     };
     YoutubeWidget.prototype.onStopMoving = function () {
-        this.content.style.display = "block";
+        if (this.content.dataset["state"] == "no-update")
+            this.div.appendChild(this.content);
+        this.content.dataset["state"] = undefined;
     };
     YoutubeWidget.prototype.showVideo = function (video) {
         var _this = this;
@@ -81,3 +85,4 @@ var YoutubeWidget = (function (_super) {
     };
     return YoutubeWidget;
 }(Widget));
+//# sourceMappingURL=YoutubeWidget.js.map

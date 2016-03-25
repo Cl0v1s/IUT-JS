@@ -188,7 +188,8 @@ class Widget {
             title.appendChild(close);
         }
         this.div.appendChild(title);
-        this.div.appendChild(this.content);
+        if(this.content.dataset["state"] != "no-update")
+            this.div.appendChild(this.content);
         this.div.style.position = "absolute";
         this.div.style.top = this.y.toString() + "px";
         this.div.style.left = this.x.toString() + "px";
