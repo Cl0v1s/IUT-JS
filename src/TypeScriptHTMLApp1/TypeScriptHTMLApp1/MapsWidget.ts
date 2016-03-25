@@ -42,4 +42,17 @@
         this.setContent(div);
     }
 
+    onStartMoving(): void {
+        if (this.content.dataset["state"] != "no-update")
+            this.div.removeChild(this.content);
+        this.content.dataset["state"] = "no-update";
+    }
+
+    onStopMoving(): void {
+        if (this.content.dataset["state"] == "no-update")
+            this.div.appendChild(this.content);
+        this.content.dataset["state"] = undefined;
+
+    }
+
 }

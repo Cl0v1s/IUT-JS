@@ -48,6 +48,16 @@ var MapsWidget = (function (_super) {
         div.appendChild(button);
         this.setContent(div);
     };
+    MapsWidget.prototype.onStartMoving = function () {
+        if (this.content.dataset["state"] != "no-update")
+            this.div.removeChild(this.content);
+        this.content.dataset["state"] = "no-update";
+    };
+    MapsWidget.prototype.onStopMoving = function () {
+        if (this.content.dataset["state"] == "no-update")
+            this.div.appendChild(this.content);
+        this.content.dataset["state"] = undefined;
+    };
     return MapsWidget;
 }(Widget));
 //# sourceMappingURL=MapsWidget.js.map
