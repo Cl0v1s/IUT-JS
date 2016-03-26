@@ -3,11 +3,21 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+
+/*
+    SportWidget
+    Widget affichant les informations sur l'équipe de munich
+ */
 var SportWidget = (function (_super) {
     __extends(SportWidget, _super);
     function SportWidget() {
         _super.apply(this, arguments);
     }
+
+    /**
+     * onCreate
+     * Fonction appelée après la création du widget
+     */
     SportWidget.prototype.onCreate = function () {
         this.width = 350;
         this.height = 170;
@@ -15,6 +25,11 @@ var SportWidget = (function (_super) {
         this.showContent();
         _super.prototype.onCreate.call(this);
     };
+
+    /**
+     * showContent
+     * Affiche le contenu du widget
+     */
     SportWidget.prototype.showContent = function () {
         var _this = this;
         var headers = {};
@@ -23,6 +38,12 @@ var SportWidget = (function (_super) {
             _this.handleContent(data);
         }, undefined, headers);
     };
+
+    /**
+     * handleContent
+     * Gère les informations récupérées de la requète
+     * @param  {[type]} informations distantes
+     */
     SportWidget.prototype.handleContent = function (data) {
         var result = JSON.parse(data);
         if (result == undefined)

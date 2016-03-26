@@ -3,11 +3,21 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+
+/*
+    MenuWidget
+    Widget affichant un menu permettant d'ajouter des élements
+ */
 var MenuWidget = (function (_super) {
     __extends(MenuWidget, _super);
     function MenuWidget() {
         _super.apply(this, arguments);
     }
+
+    /**
+     * onCreate
+     * Fonction appelée après la création du widget
+     */
     MenuWidget.prototype.onCreate = function () {
         var _this = this;
         this.width = window.innerWidth;
@@ -25,6 +35,11 @@ var MenuWidget = (function (_super) {
         this.width = window.innerWidth;
         this.onUpdate();
     };
+
+    /**
+     * showForm
+     * Affiche le formulaire permettant de choisir le nom de la zone à afficher
+     */
     MenuWidget.prototype.showForm = function () {
         var _this = this;
         var div = document.createElement("div");
@@ -47,6 +62,11 @@ var MenuWidget = (function (_super) {
         div.appendChild(button);
         this.setContent(div);
     };
+
+    /**
+     * handleForm
+     * Traite les informations indiquées dans le formulaire
+     */
     MenuWidget.prototype.handleForm = function () {
         var index = this.content.getElementsByTagName("select")[0].value;
         if (App.manager.exists(WidgetManager.Widgets[index]))

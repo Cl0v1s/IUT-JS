@@ -1,15 +1,21 @@
 
-/* AJAX
- * Classe permettant de récupérer des informations distantes depuis Internet
- */ 
+/**
+ * Ajax
+ * Classe permettant de faire des appels de ressources externes
+ */
 var Ajax = (function () {
     function Ajax() {
     }
 
-    /* GET
-     * Permet d'exécuter des requêtes GET via AJAX
-     * - url: ressource distante à atteindre
-     * - data: données à transmettre
+
+    /**
+     * Get
+     * Permet de faire des appels Ajax get
+     * @param {[type]} ressource à atteindre
+     * @param {[type]} données à envoyer
+     * @param {Function} fonction appelée lors de la réussite de la requète, doit attendre un string
+     * @param {[type]} fonction appelée lors de l'échec de la requète, doit attendre un string
+     * @param {[type]} header optionnels pour la requète
      */
     Ajax.Get = function (url, data, callback, error, header) {
         var xhr = new XMLHttpRequest();
@@ -39,6 +45,15 @@ var Ajax = (function () {
         else
             xhr.send();
     };
+
+    /**
+     * Post
+     * Permet de faire des appels Ajax post
+     * @param {[type]} ressource à atteindre
+     * @param {[type]} données à envoyer
+     * @param {Function} fonction appelée lors de la réussite de la requète, doit attendre un string
+     * @param {[type]} fonction appelée lors de l'échec de la requète, doit attendre un string
+     */
     Ajax.Post = function (url, data, callback, error) {
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function () {

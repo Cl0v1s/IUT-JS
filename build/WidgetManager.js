@@ -6,7 +6,17 @@
 /// <reference path="MapsWidget.ts"/>
 /// <reference path="MeteoWidget.ts"/>
 /// <reference path="twitter.d.ts" />
+
+/*
+    WidgetManager 
+    Classe charger de gérer les widgets 
+ */
 var WidgetManager = (function () {
+
+    /**
+     * Constructeur 
+     * @param {[type]} noeud sur lequel agit le manager et sur lequel placer les widgets
+     */
     function WidgetManager(node) {
         var _this = this;
         this.loaded = false;
@@ -23,12 +33,22 @@ var WidgetManager = (function () {
             _this.update();
         }, 50);
     }
+
+    /**
+     * save
+     * Sauvegarde les informations relatives aux widgets en mémoire (position+etats)
+     */
     WidgetManager.prototype.save = function () {
         if (this.loaded) {
             console.log("saving " + JSON.stringify(this.widgets));
             localStorage.setItem("WidgetManager", JSON.stringify(this.widgets));
         }
     };
+
+    /**
+     * load
+     * charge les informations relatives aux widgets en mémoire 
+     */
     WidgetManager.prototype.load = function () {
         var _this = this;
         this.loaded = true;
@@ -55,9 +75,22 @@ var WidgetManager = (function () {
         });
         twttr.widgets.load();
     };
+
+    /**
+     * getWidgets
+     * Retourne la liste des widgets
+     * @return {[type]} Liste des widgets
+     */
     WidgetManager.prototype.getWidgets = function () {
         return this.widgets;
     };
+
+    /**
+     * exists
+     * vérifie si une instance d'une classe de widgets existe déja dans al liste ou non
+     * @param  {[type]} classe à tester
+     * @return {[type]} vrai si oui, faux sinon
+     */
     WidgetManager.prototype.exists = function (clas) {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] instanceof clas)
@@ -65,6 +98,11 @@ var WidgetManager = (function () {
         }
         return false;
     };
+
+    /**
+     * update
+     * Met à jour les widgets et évitant les collisions notamment
+     */
     WidgetManager.prototype.update = function () {
         var _this = this;
         this.widgets.forEach(function (widget) {
@@ -82,6 +120,11 @@ var WidgetManager = (function () {
         });
         this.save();
     };
+
+    /**
+     * onDragStop
+     * Action a réaliser lors de l'arret du déplacement d'un widget
+     */
     WidgetManager.prototype.onDragStop = function () {
         var _this = this;
         if (this.moving != undefined) {
@@ -96,12 +139,24 @@ var WidgetManager = (function () {
         }
         this.moving = undefined;
     };
+
+    /**
+     * getRandomZone
+     * Récupère des coordonées de manière aléaoire
+     * @return {[type]} coordonnées
+     */
     WidgetManager.prototype.getRandomZone = function () {
         var object = { x: null, y: null };
         object.x = Math.floor(Math.random() * this.node.clientWidth);
         object.y = Math.floor(Math.random() * (this.node.clientHeight - 70)) + 70;
         return object;
     };
+
+    /**
+     * onDragOver
+     * Actions à réaliser pendant le déplacement d'un widget
+     * @param  {[type]} évenement de souris 
+     */
     WidgetManager.prototype.onDragOver = function (e) {
         if (this.moving == undefined) {
             return;
@@ -111,10 +166,22 @@ var WidgetManager = (function () {
         this.moving.div.style.zIndex = "100";
         this.moving.move(e.pageX, e.pageY);
     };
+
+    /**
+     * setMoving
+     * Règle le widget à déplacer
+     * @param {[type]} widget à déplacer
+     */
     WidgetManager.prototype.setMoving = function (moving) {
         if (moving.fixed == false)
             this.moving = moving;
     };
+
+    /**
+     * registerWidget
+     * Enregistre un nouveau widget à gérer
+     * @param  {[type]} nouveau widget
+     */
     WidgetManager.prototype.registerWidget = function (widget) {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] == widget)
@@ -126,6 +193,12 @@ var WidgetManager = (function () {
         this.save();
         return true;
     };
+
+    /**
+     * organize 
+     * Déplace le widget de facon à éviter les collisions
+     * @param  {[type]} widget à organiser
+     */
     WidgetManager.prototype.organize = function (widget) {
         var _this = this;
         var moved = false;
@@ -164,6 +237,14 @@ var WidgetManager = (function () {
         }
         return moved;
     };
+
+    /**
+     * unregisterWidget
+     * Supprime un widget de la liste des widgets à gérer
+     * @param  {[type]} widget à supprimer
+     * @param  {[type]} si vrai, supprime réellement le widget si faux, arrète juste de le gérer
+     * @return {[type]}
+     */
     WidgetManager.prototype.unregisterWidget = function (widget, del) {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] == widget) {
@@ -176,6 +257,10 @@ var WidgetManager = (function () {
         }
         return false;
     };
+
+    /*
+        Liste des classes de widgets pouvant être instanciées par le système
+     */
     WidgetManager.Widgets = [
         DateWidget,
         PictureWidget,

@@ -5,11 +5,21 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+
+/*
+    MeteoWidget
+    Widget permettant d'afficher la météo d'un lieu choisit par l'user
+ */
 var MeteoWidget = (function (_super) {
     __extends(MeteoWidget, _super);
     function MeteoWidget() {
         _super.apply(this, arguments);
     }
+
+    /**
+     * onCreate
+     * Fonction appelée après la création du widget
+     */
     MeteoWidget.prototype.onCreate = function () {
         this.name = "Meteo";
         this.width = 350;
@@ -18,6 +28,11 @@ var MeteoWidget = (function (_super) {
             this.showForm();
         _super.prototype.onCreate.call(this);
     };
+
+    /**
+     * showForm
+     * Affiche le formulaire permettant de choisir le nom de la zone à afficher
+     */
     MeteoWidget.prototype.showForm = function () {
         var _this = this;
         this.setSize(350, 70);
@@ -29,6 +44,11 @@ var MeteoWidget = (function (_super) {
         div.appendChild(sub);
         this.setContent(div);
     };
+
+    /**
+     * formClick
+     * Traite les informations indiquées dans le formulaire
+     */
     MeteoWidget.prototype.formClick = function () {
         var city;
         var input = this.content.getElementsByTagName("input")[0];
@@ -37,6 +57,13 @@ var MeteoWidget = (function (_super) {
             return;
         this.getData(city);
     };
+
+    /**
+     * load
+     * Charge les données stockées dans la mémoire
+     * @return {[type]} vrai si chargement a eu lieu, faux sinon
+     * 
+     */
     MeteoWidget.prototype.load = function () {
         if (localStorage.getItem("MeteoWidget") == null || localStorage.getItem("MeteoWidget") == undefined) {
             return false;
@@ -44,15 +71,33 @@ var MeteoWidget = (function (_super) {
         this.getData(localStorage.getItem("MeteoWidget"));
         return true;
     };
+
+    /**
+     * save
+     * Sauvegarde les informations dans la mémoire
+     * @param  {[type]} information à stocker
+     */
     MeteoWidget.prototype.save = function (query) {
         localStorage.setItem("MeteoWidget", query);
     };
+
+    /**
+     * getData
+     * Lance la récupération des informations distantes
+     * @param  {[type]} paramètre distant
+     */
     MeteoWidget.prototype.getData = function (query) {
         var _this = this;
         Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + query + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, function (res) {
             _this.handleData(res);
         });
     };
+
+    /**
+     * handleData
+     * Gère les informations récupérées de la requète
+     * @param  {[type]} informations distantes
+     */
     MeteoWidget.prototype.handleData = function (res) {
         var _this = this;
         var data = JSON.parse(res);

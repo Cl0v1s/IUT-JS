@@ -1,6 +1,18 @@
 /// <reference path="app.ts"/>
 /// <reference path="Ajax.ts"/>
+
+/*
+    Widget
+    Classe de base permettant de représenter et de gérer un widget à l'écran
+ */
 var Widget = (function () {
+
+    /**
+     * Constructeur
+     * Créer un nouveau Widget
+     * @param {[type]} position x
+     * @param {[type]} position y
+     */
     function Widget(x, y) {
         var _this = this;
         this.counter = 0;
@@ -24,71 +36,160 @@ var Widget = (function () {
         this.canScroll(false);
         this.onCreate();
     }
+
+    /**
+     * load 
+     * permet de charger les données en mémoire sur le widget
+     * @return {[type]} vrai si chargement réussi
+     */
     Widget.prototype.load = function () {
         return true;
     };
+
+    /**
+     * intersects
+     * vérifie si le widget coupe le rectangle passé en paramètre
+     * @param  {[type]} position x du rectangle
+     * @param  {[type]} position y du rectangle
+     * @param  {[type]} largeur du rectangle
+     * @param  {[type]} hauteur du rectangle
+     */
     Widget.prototype.intersects = function (x, y, w, h) {
         if (this.x + this.width >= x && this.x <= x + w && this.y + this.height >= y && this.y <= y + h) {
             return true;
         }
         return false;
     };
+
+    /**
+     * setSize
+     * change la taille du widget 
+     * @param {[type]} nouvelle largeur
+     * @param {[type]} nouvelle hauteur
+     */
     Widget.prototype.setSize = function (w, h) {
         this.width = w;
         this.height = h;
         this.onUpdate();
         App.manager.organize(this);
     };
+
+    /**
+     * setParent
+     * Permet de changer le noeud parent du widget
+     * @param {[type]} noeud parent
+     */
     Widget.prototype.setParent = function (node) {
         this.parent = node;
         this.parent.appendChild(this.div);
     };
+
+    /**
+     * onCreate
+     * Fonction appelée après la création du widget
+     */
     Widget.prototype.onCreate = function () {
         this.onUpdate();
     };
+
+    /**
+     * getPosition 
+     * Retourne la position du wigget sous forme de tableau
+     * @return {[type]} tableau contenant deux entrées x et y 
+     */
     Widget.prototype.getPosition = function () {
         var res = new Array();
         res["x"] = this.x;
         res["y"] = this.y;
         return res;
     };
+
+    /**
+     * move 
+     * Permet de déplacer le widget
+     * @param  {[type]} nouvelle position x 
+     * @param  {[type]} nouvelle position y
+     */
     Widget.prototype.move = function (x, y) {
         this.x = x;
         this.y = y;
         this.onMoving();
     };
+
+    /**
+     * getSize
+     * Retourne la largeur et la hauteur dans un tableau à deux entrées
+     * @return {[type]}tableau contenant deux entrées w et h 
+     */
     Widget.prototype.getSize = function () {
         var res = new Array();
         res["w"] = this.width;
         res["h"] = this.height;
         return res;
     };
+
+    /**
+     * onCollid
+     * Teste la collision entre deux widgets
+     * @param  {[type]} autre widget
+     * @return {[type]} vrai si collision faux sinon
+     */
     Widget.prototype.onCollid = function (other) {
         if (this.x + this.width >= other.x && this.x <= other.x + other.width && this.y + this.height >= other.y && this.y <= other.y + other.height) {
             return true;
         }
         return false;
     };
+
+    /**
+     * contains
+     * Teste si le widget contient le point passé en paramètre
+     * @param  {[type]} position x du point 
+     * @param  {[type]} position y du point
+     * @return {[type]} vrai si contenu, faux sinon
+     */
     Widget.prototype.contains = function (x, y) {
         if (this.x + this.width >= x && this.x <= x && this.y + this.height >= y && this.y <= y) {
             return true;
         }
         return false;
     };
+
+    /**
+     * onDelete
+     * appelé lors de la suppression du widget
+     */
     Widget.prototype.onDelete = function () {
         if (this.div != undefined && this.parent != undefined)
             this.parent.removeChild(this.div);
     };
+
+    /**
+     * setContent
+     * Changle le noeud de contenu du widget
+     * @param {[type]} nouveau contenu
+     */
     Widget.prototype.setContent = function (content) {
         this.content.innerHTML = "";
         this.content.appendChild(content);
     };
+
+    /**
+     * canScroll
+     * Définit sur le contenu du widget peut scroller ou non
+     * @param  {[type]} possibilité de scroller ou non
+     */
     Widget.prototype.canScroll = function (can) {
         if (can)
             this.div.style.overflowY = "auto";
         else
             this.div.style.overflowY = "hidden";
     };
+
+    /**
+     * onMoving
+     * Fonction appelée après le déplacement du widget
+     */
     Widget.prototype.onMoving = function () {
         var _this = this;
         this.conflicts = new Array();
@@ -123,13 +224,33 @@ var Widget = (function () {
         }
         this.onUpdate();
     };
+
+    /**
+     * closeWidget
+     * Permet de fermer le widget
+     */
     Widget.prototype.closeWidget = function () {
         App.manager.unregisterWidget(this);
     };
+
+    /**
+     * onStartMoving
+     * Fonction appelée lors du début du déplacement du widget
+     */
     Widget.prototype.onStartMoving = function () {
     };
+
+    /**
+     * onStopMoving
+     * Fonction appelée lors de la fin du déplacement du widget
+     */
     Widget.prototype.onStopMoving = function () {
     };
+
+    /**
+     * onUpdate
+     * Fonction permettant de mettre à jour le widget
+     */
     Widget.prototype.onUpdate = function () {
         var _this = this;
         this.div.innerHTML = "";
@@ -153,6 +274,12 @@ var Widget = (function () {
         this.div.style.width = this.width.toString() + "px";
         this.div.style.height = this.height.toString() + "px";
     };
+
+    /**
+     * getCenter
+     * Retourne les coordonnées du centre de ce widget
+     * @return {[type]} coordonées du centre du widget
+     */
     Widget.prototype.getCenter = function () {
         var res = new Array();
         res["x"] = this.x + this.width / 2;

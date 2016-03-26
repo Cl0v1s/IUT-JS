@@ -4,11 +4,21 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+
+/*
+    PictureWidget
+    Widget permettant de rechercher et d'afficher une image depuis Imgur
+ */
 var PictureWidget = (function (_super) {
     __extends(PictureWidget, _super);
     function PictureWidget() {
         _super.apply(this, arguments);
     }
+
+    /**
+     * onCreate
+     * Fonction appelée après la création du widget
+     */
     PictureWidget.prototype.onCreate = function () {
         this.width = 350;
         this.height = 70;
@@ -17,6 +27,11 @@ var PictureWidget = (function (_super) {
             this.showForm();
         _super.prototype.onCreate.call(this);
     };
+
+    /**
+     * showForm
+     * Affiche le formulaire permettant de choisir le nom de la zone à afficher
+     */
     PictureWidget.prototype.showForm = function () {
         var _this = this;
         this.setSize(350, 70);
@@ -28,12 +43,23 @@ var PictureWidget = (function (_super) {
         div.appendChild(button);
         this.setContent(div);
     };
+
+    /**
+     * formClick
+     * Traite les informations indiquées dans le formulaire
+     */
     PictureWidget.prototype.formClick = function (self) {
         var search = this.content.getElementsByTagName("input")[0].value;
         if (search == undefined || search == "")
             return;
         this.getData(search);
     };
+
+    /**
+     * getData
+     * Permet de lancer la requete vers la ressources distante 
+     * @param  {[type]} paramètre entré par l'user
+     */
     PictureWidget.prototype.getData = function (query) {
         var _this = this;
         var headers = {};
@@ -42,9 +68,22 @@ var PictureWidget = (function (_super) {
             _this.handleGallery(_this, data);
         }, undefined, headers);
     };
+
+    /**
+     * save
+     * Sauvegarde les informations dans la mémoire
+     * @param  {[type]} information à stocker
+     */
     PictureWidget.prototype.save = function (picture) {
         localStorage.setItem("PictureWidget", JSON.stringify(picture));
     };
+
+    /**
+     * load
+     * Charge les données stockées dans la mémoire
+     * @return {[type]} vrai si chargement a eu lieu, faux sinon
+     * 
+     */
     PictureWidget.prototype.load = function () {
         if (localStorage.getItem("PictureWidget") == null || localStorage.getItem("PictureWidget") == undefined) {
             return false;
@@ -52,8 +91,15 @@ var PictureWidget = (function (_super) {
         this.showPicture(JSON.parse(localStorage.getItem("PictureWidget")));
         return true;
     };
+
+    /**
+     * handleGallery
+     * Gère les informations récupérées de la requète
+     * @param  {[type]} informations distantes
+     */
     PictureWidget.prototype.handleGallery = function (self, data) {
         var result = JSON.parse(data);
+        //on choisit une image au hasard jusqu'a ce qu'elle marche
         var picture = result.data[Math.floor(Math.random() * result.data.length)];
         var counter = 0;
         while (picture == undefined || picture.type == undefined || (picture.type.indexOf("image/") == -1 && counter < 15)) {
@@ -66,6 +112,12 @@ var PictureWidget = (function (_super) {
         else
             alert("Aucune image n'a ete trouvee.");
     };
+
+    /**
+     * showPicture
+     * Affiche l'image recu
+     * @param  {[type]} Image à afficher
+     */
     PictureWidget.prototype.showPicture = function (picture) {
         var _this = this;
         this.save(picture);

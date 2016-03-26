@@ -4,11 +4,21 @@ var __extends = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
+
+/*
+    YoutubeWidget
+    Widget permettant d'afficher une vidéo youtube
+ */
 var YoutubeWidget = (function (_super) {
     __extends(YoutubeWidget, _super);
     function YoutubeWidget() {
         _super.apply(this, arguments);
     }
+
+    /**
+     * onCreate
+     * Fonction appelée après la création du widget
+     */
     YoutubeWidget.prototype.onCreate = function () {
         this.name = "Youtube";
         this.width = 350;
@@ -17,6 +27,11 @@ var YoutubeWidget = (function (_super) {
             this.showForm();
         _super.prototype.onCreate.call(this);
     };
+
+    /**
+     * showForm
+     * Affiche le formulaire permettant de choisir le nom de la zone à afficher
+     */
     YoutubeWidget.prototype.showForm = function () {
         var _this = this;
         this.setSize(350, 70);
@@ -30,6 +45,11 @@ var YoutubeWidget = (function (_super) {
         content.appendChild(button);
         this.setContent(content);
     };
+
+    /**
+     * handleForm
+     * Traite les informations indiquées dans le formulaire
+     */
     YoutubeWidget.prototype.handleForm = function () {
         var search = (this.content.getElementsByTagName("input")[0].value);
         if (search == "")
@@ -37,9 +57,22 @@ var YoutubeWidget = (function (_super) {
         this.save(search);
         this.getData(search);
     };
+
+    /**
+     * save
+     * Sauvegarde les informations dans la mémoire
+     * @param  {[type]} information à stocker
+     */
     YoutubeWidget.prototype.save = function (video) {
         localStorage.setItem("YoutubeWidget", JSON.stringify(video));
     };
+
+    /**
+     * load
+     * Charge les données stockées dans la mémoire
+     * @return {[type]} vrai si chargement a eu lieu, faux sinon
+     * 
+     */
     YoutubeWidget.prototype.load = function () {
         if (localStorage.getItem("YoutubeWidget") == null || localStorage.getItem("YoutubeWidget") == undefined) {
             return false;
@@ -47,12 +80,24 @@ var YoutubeWidget = (function (_super) {
         this.showVideo(JSON.parse(localStorage.getItem("YoutubeWidget")));
         return true;
     };
+
+    /**
+     * getData
+     * Lance la récupération des informations distantes
+     * @param  {[type]} paramètre distant
+     */
     YoutubeWidget.prototype.getData = function (query) {
         var _this = this;
         Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + query, null, function (data) {
             _this.handleResult(_this, data);
         });
     };
+
+    /**
+     * handleResult
+     * Gère les informations récupérées de la requète
+     * @param  {[type]} informations distantes
+     */
     YoutubeWidget.prototype.handleResult = function (self, data) {
         var result = JSON.parse(data);
         if (result == undefined || result.items == undefined) {
@@ -71,16 +116,33 @@ var YoutubeWidget = (function (_super) {
         }
         this.showVideo(video);
     };
+
+    /**
+     * onStartMoving
+     * Fonction appelée lors du début du déplacement du widget
+     */
     YoutubeWidget.prototype.onStartMoving = function () {
         if (this.content.dataset["state"] != "no-update")
             this.div.removeChild(this.content);
         this.content.dataset["state"] = "no-update";
     };
+
+    /**
+     * onStopMoving
+     * Fonction appelée lors de la fin du déplacement du widget
+     */
     YoutubeWidget.prototype.onStopMoving = function () {
         if (this.content.dataset["state"] == "no-update")
             this.div.appendChild(this.content);
         this.content.dataset["state"] = undefined;
     };
+
+
+    /**
+     * showVideo
+     * Affiche la video réceptionnée de la requète
+     * @param  {[type]} video réceptionnée
+     */
     YoutubeWidget.prototype.showVideo = function (video) {
         var _this = this;
         this.save(video);
