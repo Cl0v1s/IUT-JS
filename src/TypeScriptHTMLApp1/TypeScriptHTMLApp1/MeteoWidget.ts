@@ -60,8 +60,7 @@ class MeteoWidget extends Widget {
             alert('Impossible de trouver le lieu demande');
             return;
         }
-        this.setSize(350, 180);
-        console.log(data);
+        this.setSize(350, 250);
         var div: HTMLElement = document.createElement("div");
         div.innerHTML = "\
                 <center><img src='http://openweathermap.org/img/w/"+data.weather[0].icon+".png'></center>\
@@ -80,6 +79,7 @@ class MeteoWidget extends Widget {
         back.style.marginRight = "auto";
 
         div.appendChild(back);
+
         this.setContent(div);
     }
 } 

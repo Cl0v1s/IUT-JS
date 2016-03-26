@@ -163,4 +163,4 @@ var Widget = (function () {
     };
     return Widget;
 }());
-//# sourceMappingURL=Widget.js.map
+//# sourceMappingURL=widget.js.map

@@ -60,8 +60,7 @@ var MeteoWidget = (function (_super) {
             alert('Impossible de trouver le lieu demande');
             return;
         }
-        this.setSize(350, 180);
-        console.log(data);
+        this.setSize(350, 250);
         var div = document.createElement("div");
         div.innerHTML = "\
                 <center><img src='http://openweathermap.org/img/w/" + data.weather[0].icon + ".png'></center>\
