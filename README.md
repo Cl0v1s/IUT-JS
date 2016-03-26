@@ -4,7 +4,7 @@
 
 Ce projet a été réalisé à l'aide de [TypeScript](http://www.typescriptlang.org/).  
 Les sources Javascript commentées sont disponibles dans le dossier "build" situé à la racine du répertoire.   
-Le test peut être exécuté en ouvrant le fichier index.html à l'aide d'un navigateur supportant HTML5 et respectant les normes W3C.  
+Le test peut être exécuté en ouvrant le fichier build/index.html à l'aide d'un navigateur supportant HTML5 et respectant les normes W3C.  
 Les sources Typescript sont disponibles dans le dossier "src" situé à la racine du répertoire, au sein d'une solution Visual Studio.  
 
 
