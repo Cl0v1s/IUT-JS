@@ -12,6 +12,7 @@ class App {
 
 
         App.manager.registerWidget(menu);
+        App.manager.load();
 
     }
 

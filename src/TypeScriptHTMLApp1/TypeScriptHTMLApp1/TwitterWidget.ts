@@ -37,7 +37,6 @@ class TwitterWidget extends Widget {
             this.div.appendChild(title);
             if (this.content.dataset["state"] != "no-update")
                 this.div.appendChild(this.content);
-            console.log("updating twitter");
             this.loaded = true;
         }
 

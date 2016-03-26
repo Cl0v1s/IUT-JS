@@ -40,7 +40,6 @@ var TwitterWidget = (function (_super) {
             this.div.appendChild(title);
             if (this.content.dataset["state"] != "no-update")
                 this.div.appendChild(this.content);
-            console.log("updating twitter");
             this.loaded = true;
         }
         this.div.style.position = "absolute";

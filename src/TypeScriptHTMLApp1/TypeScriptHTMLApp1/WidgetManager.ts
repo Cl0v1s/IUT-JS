@@ -5,6 +5,7 @@
 /// <reference path="YoutubeWidget.ts"/>
 /// <reference path="MapsWidget.ts"/>
 /// <reference path="MeteoWidget.ts"/>
+/// <reference path="twitter.d.ts" />
 
 
 
@@ -13,6 +14,7 @@ class WidgetManager {
         private widgets: Array<Widget>;
         private node: HTMLElement;
         public moving: Widget;
+        private loaded: boolean; 
 
         static Widgets = [
             DateWidget, 
@@ -25,6 +27,7 @@ class WidgetManager {
         ];
 
         constructor(node: HTMLElement) {
+            this.loaded = false;
             this.moving = undefined;
             this.widgets = new Array();
             this.node = node;
@@ -38,6 +41,40 @@ class WidgetManager {
             setInterval(() => {
                 this.update();
             }, 50);
+        }
+
+        private save(): void {
+            if (this.loaded) {
+                console.log("saving " + JSON.stringify(this.widgets));
+                localStorage.setItem("WidgetManager", JSON.stringify(this.widgets));
+            }
+        }
+
+        public load(): void {
+            this.loaded = true;
+            if (localStorage.getItem("WidgetManager") == null || localStorage.getItem("WidgetManager") == undefined)
+                return;
+            console.log("Starting loading");
+            var model: Array<Widget> = new Array();
+            WidgetManager.Widgets.forEach((cl: any) => {
+                model.push(new cl(0, 0));
+            });
+            var data: Array<any> = JSON.parse(localStorage.getItem("WidgetManager"));
+            console.log(data);
+            data.forEach((e:any) => {
+                for (var i = 0; i != model.length; i++) {
+                    if (model[i].name == e.name) {
+                        var w: Widget = new WidgetManager.Widgets[i](e.x, e.y);
+                        this.registerWidget(w);
+                        w.x = e.x;
+                        w.y = e.y;
+                        console.log("new "+w.name);
+
+                        break;
+                    }
+                }
+            });
+            twttr.widgets.load();
         }
 
         public getWidgets(): Array<Widget> {
@@ -66,6 +103,7 @@ class WidgetManager {
                     }
                 }
             });
+            this.save();
         }
 
         private onDragStop(): void {
@@ -77,6 +115,7 @@ class WidgetManager {
                 this.moving.div.style.transitionProperty = "all";
                 this.moving.div.style.zIndex = "0";
                 this.moving.onStopMoving();
+                this.save();
             }
             this.moving = undefined;
         }
@@ -113,6 +152,7 @@ class WidgetManager {
             widget.setParent(this.node);
             this.widgets.push(widget);
             this.organize(widget);
+            this.save();
             return true;
         }
 
@@ -163,7 +203,6 @@ class WidgetManager {
             for (var i: number = 0; i != this.widgets.length; i++) {
                 if (this.widgets[i] == widget) {
                     if (del == undefined || del == null || del == true) {
-                        console.log("trying clean");
                         this.widgets[i].onDelete();
                     }
                     this.widgets.splice(i);

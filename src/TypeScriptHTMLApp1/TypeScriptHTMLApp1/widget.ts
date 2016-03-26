@@ -77,7 +77,6 @@ class Widget {
     }
 
     move(x: number, y: number): void {
-        console.log("to :" + x + " " + y);
         this.x = x;
         this.y = y;
         this.onMoving();
@@ -125,7 +124,6 @@ class Widget {
         this.conflicts = new Array();
         App.manager.getWidgets().forEach((other: Widget) => {
             if (other != this &&  this.onCollid(other)) {
-                console.log("Conflit de " + this.name + " avec " + other.name);
                 this.conflicts.push(other);
             }
         });

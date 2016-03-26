@@ -5,9 +5,11 @@
 /// <reference path="YoutubeWidget.ts"/>
 /// <reference path="MapsWidget.ts"/>
 /// <reference path="MeteoWidget.ts"/>
+/// <reference path="twitter.d.ts" />
 var WidgetManager = (function () {
     function WidgetManager(node) {
         var _this = this;
+        this.loaded = false;
         this.moving = undefined;
         this.widgets = new Array();
         this.node = node;
@@ -21,6 +23,38 @@ var WidgetManager = (function () {
             _this.update();
         }, 50);
     }
+    WidgetManager.prototype.save = function () {
+        if (this.loaded) {
+            console.log("saving " + JSON.stringify(this.widgets));
+            localStorage.setItem("WidgetManager", JSON.stringify(this.widgets));
+        }
+    };
+    WidgetManager.prototype.load = function () {
+        var _this = this;
+        this.loaded = true;
+        if (localStorage.getItem("WidgetManager") == null || localStorage.getItem("WidgetManager") == undefined)
+            return;
+        console.log("Starting loading");
+        var model = new Array();
+        WidgetManager.Widgets.forEach(function (cl) {
+            model.push(new cl(0, 0));
+        });
+        var data = JSON.parse(localStorage.getItem("WidgetManager"));
+        console.log(data);
+        data.forEach(function (e) {
+            for (var i = 0; i != model.length; i++) {
+                if (model[i].name == e.name) {
+                    var w = new WidgetManager.Widgets[i](e.x, e.y);
+                    _this.registerWidget(w);
+                    w.x = e.x;
+                    w.y = e.y;
+                    console.log("new " + w.name);
+                    break;
+                }
+            }
+        });
+        twttr.widgets.load();
+    };
     WidgetManager.prototype.getWidgets = function () {
         return this.widgets;
     };
@@ -46,6 +80,7 @@ var WidgetManager = (function () {
                 }
             }
         });
+        this.save();
     };
     WidgetManager.prototype.onDragStop = function () {
         var _this = this;
@@ -57,6 +92,7 @@ var WidgetManager = (function () {
             this.moving.div.style.transitionProperty = "all";
             this.moving.div.style.zIndex = "0";
             this.moving.onStopMoving();
+            this.save();
         }
         this.moving = undefined;
     };
@@ -87,6 +123,7 @@ var WidgetManager = (function () {
         widget.setParent(this.node);
         this.widgets.push(widget);
         this.organize(widget);
+        this.save();
         return true;
     };
     WidgetManager.prototype.organize = function (widget) {
@@ -131,7 +168,6 @@ var WidgetManager = (function () {
         for (var i = 0; i != this.widgets.length; i++) {
             if (this.widgets[i] == widget) {
                 if (del == undefined || del == null || del == true) {
-                    console.log("trying clean");
                     this.widgets[i].onDelete();
                 }
                 this.widgets.splice(i);

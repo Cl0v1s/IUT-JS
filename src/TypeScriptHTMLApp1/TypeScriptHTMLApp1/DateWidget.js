@@ -18,7 +18,6 @@ var DateWidget = (function (_super) {
         _super.prototype.onCreate.call(this);
     };
     DateWidget.prototype.showContent = function (self) {
-        console.log("updating...");
         var date = new Date();
         self.content.innerHTML = "\
             <span>Nous sommes le <span class='k'>" + date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "</span></span><br>\

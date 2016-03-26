@@ -5,6 +5,7 @@ var App = (function () {
         App.manager = new WidgetManager(root);
         var menu = new MenuWidget(0, 0);
         App.manager.registerWidget(menu);
+        App.manager.load();
     }
     return App;
 }());

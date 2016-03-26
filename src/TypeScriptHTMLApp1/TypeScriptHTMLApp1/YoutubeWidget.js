@@ -62,7 +62,6 @@ var YoutubeWidget = (function (_super) {
         var video = result.items[Math.floor(Math.random() * result.items.length)];
         var counter = 0;
         while ((video == undefined || video.id == undefined || video.id.kind.indexOf("video") == -1) && counter < 50) {
-            console.log(video.id.kind);
             video = result.items[Math.floor(Math.random() * result.items.length)];
             counter++;
         }

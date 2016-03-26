@@ -13,7 +13,6 @@
     }
 
     showContent(self: DateWidget): void {
-        console.log("updating...");
         var date: Date = new Date();
         self.content.innerHTML = "\
             <span>Nous sommes le <span class='k'>"+ date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "</span></span><br>\

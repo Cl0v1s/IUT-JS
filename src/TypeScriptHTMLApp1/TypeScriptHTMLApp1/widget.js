@@ -53,7 +53,6 @@ var Widget = (function () {
         return res;
     };
     Widget.prototype.move = function (x, y) {
-        console.log("to :" + x + " " + y);
         this.x = x;
         this.y = y;
         this.onMoving();
@@ -95,7 +94,6 @@ var Widget = (function () {
         this.conflicts = new Array();
         App.manager.getWidgets().forEach(function (other) {
             if (other != _this && _this.onCollid(other)) {
-                console.log("Conflit de " + _this.name + " avec " + other.name);
                 _this.conflicts.push(other);
             }
         });
