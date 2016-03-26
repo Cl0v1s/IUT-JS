@@ -7,7 +7,8 @@ class PictureWidget extends Widget
         this.width = 350;
         this.height = 70;
         this.name = "Photo";
-        this.showForm();
+        if(!this.load())
+            this.showForm();
 		super.onCreate();
     }
 
@@ -27,14 +28,28 @@ class PictureWidget extends Widget
         var search: string = (<HTMLInputElement>this.content.getElementsByTagName("input")[0]).value;
         if (search == undefined || search == "")
             return;
-		//rechercher l'api
+        this.getData(search);
+    }
+
+    getData(query: string): void {
         var headers = {};
         headers["Authorization"] = "Client-ID a6284859047b915";
-        Ajax.Get("https://api.imgur.com/3/gallery/search/?q="+search+"&client", null, (data: string) => {
+        Ajax.Get("https://api.imgur.com/3/gallery/search/?q=" + query + "&client", null, (data: string) => {
             this.handleGallery(this, data);
-        }, undefined,headers); 
-       
-    }	
+        }, undefined, headers); 
+    }
+
+    save(picture : any): void {
+        localStorage.setItem("PictureWidget", JSON.stringify(picture));
+    }
+
+    load(): boolean {
+        if (localStorage.getItem("PictureWidget") == null || localStorage.getItem("PictureWidget") == undefined) {
+            return false;
+        }
+        this.showPicture(JSON.parse(localStorage.getItem("PictureWidget")));
+        return true;
+    }
 
     handleGallery(self: PictureWidget, data: string): void {
         var result: any = JSON.parse(data);
@@ -52,6 +67,7 @@ class PictureWidget extends Widget
     }
 
     showPicture(picture: any) {
+        this.save(picture);
         this.setSize(250, 400);
         this.canScroll(true);
         var div: HTMLDivElement = document.createElement("div");

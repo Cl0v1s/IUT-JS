@@ -13,7 +13,8 @@ var PictureWidget = (function (_super) {
         this.width = 350;
         this.height = 70;
         this.name = "Photo";
-        this.showForm();
+        if (!this.load())
+            this.showForm();
         _super.prototype.onCreate.call(this);
     };
     PictureWidget.prototype.showForm = function () {
@@ -28,16 +29,28 @@ var PictureWidget = (function (_super) {
         this.setContent(div);
     };
     PictureWidget.prototype.formClick = function (self) {
-        var _this = this;
         var search = this.content.getElementsByTagName("input")[0].value;
         if (search == undefined || search == "")
             return;
-        //rechercher l'api
+        this.getData(search);
+    };
+    PictureWidget.prototype.getData = function (query) {
+        var _this = this;
         var headers = {};
         headers["Authorization"] = "Client-ID a6284859047b915";
-        Ajax.Get("https://api.imgur.com/3/gallery/search/?q=" + search + "&client", null, function (data) {
+        Ajax.Get("https://api.imgur.com/3/gallery/search/?q=" + query + "&client", null, function (data) {
             _this.handleGallery(_this, data);
         }, undefined, headers);
+    };
+    PictureWidget.prototype.save = function (picture) {
+        localStorage.setItem("PictureWidget", JSON.stringify(picture));
+    };
+    PictureWidget.prototype.load = function () {
+        if (localStorage.getItem("PictureWidget") == null || localStorage.getItem("PictureWidget") == undefined) {
+            return false;
+        }
+        this.showPicture(JSON.parse(localStorage.getItem("PictureWidget")));
+        return true;
     };
     PictureWidget.prototype.handleGallery = function (self, data) {
         var result = JSON.parse(data);
@@ -55,6 +68,7 @@ var PictureWidget = (function (_super) {
     };
     PictureWidget.prototype.showPicture = function (picture) {
         var _this = this;
+        this.save(picture);
         this.setSize(250, 400);
         this.canScroll(true);
         var div = document.createElement("div");
