@@ -14,7 +14,8 @@ var MeteoWidget = (function (_super) {
         this.name = "Meteo";
         this.width = 350;
         this.height = 70;
-        this.showForm();
+        if (!this.load())
+            this.showForm();
         _super.prototype.onCreate.call(this);
     };
     MeteoWidget.prototype.showForm = function () {
@@ -24,16 +25,31 @@ var MeteoWidget = (function (_super) {
         div.innerHTML = "<input type='text' placeholder='Nom de la ville...'>";
         var sub = document.createElement("button");
         sub.innerHTML = "Rechercher";
-        sub.addEventListener("click", function () { _this.formClick(_this); });
+        sub.addEventListener("click", function () { _this.formClick(); });
         div.appendChild(sub);
         this.setContent(div);
     };
-    MeteoWidget.prototype.formClick = function (self) {
-        var _this = this;
+    MeteoWidget.prototype.formClick = function () {
         var city;
         var input = this.content.getElementsByTagName("input")[0];
         city = input.value;
-        Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, function (res) {
+        if (city == "")
+            return;
+        this.getData(city);
+    };
+    MeteoWidget.prototype.load = function () {
+        if (localStorage.getItem("MeteoWidget") == null || localStorage.getItem("MeteoWidget") == undefined) {
+            return false;
+        }
+        this.getData(localStorage.getItem("MeteoWidget"));
+        return true;
+    };
+    MeteoWidget.prototype.save = function (query) {
+        localStorage.setItem("MeteoWidget", query);
+    };
+    MeteoWidget.prototype.getData = function (query) {
+        var _this = this;
+        Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + query + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, function (res) {
             _this.handleData(res);
         });
     };
@@ -54,6 +70,7 @@ var MeteoWidget = (function (_super) {
                 Humidité: <span class='k'>" + data.main.humidity + "</span><br>\
                 Description: <span class='k'>" + data.weather[0].description + "</span><br><br>\
             ";
+        this.save(data.name);
         var back = document.createElement("button");
         back.innerHTML = "Retour";
         back.addEventListener("click", function () { _this.showForm(); });

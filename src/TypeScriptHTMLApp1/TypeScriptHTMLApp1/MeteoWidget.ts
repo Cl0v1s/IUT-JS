@@ -9,7 +9,8 @@ class MeteoWidget extends Widget {
         this.name = "Meteo";
         this.width = 350;
         this.height = 70;
-        this.showForm();
+        if (!this.load())
+            this.showForm();
         super.onCreate();
     }
 
@@ -19,20 +20,37 @@ class MeteoWidget extends Widget {
         div.innerHTML = "<input type='text' placeholder='Nom de la ville...'>";
         var sub: HTMLButtonElement = document.createElement("button");
         sub.innerHTML = "Rechercher";
-        sub.addEventListener("click", () => { this.formClick(this); });
+        sub.addEventListener("click", () => { this.formClick(); });
         div.appendChild(sub);
         this.setContent(div);
     }
 
-    formClick(self : MeteoWidget): void {
+    formClick(): void {
 
         var city: string;
         var input: HTMLInputElement = <HTMLInputElement>this.content.getElementsByTagName("input")[0];
         city = input.value;
-        Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + city + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, (res:string) => {
+        if (city == "")
+            return;
+        this.getData(city);
+    }
+
+    load(): boolean {
+        if (localStorage.getItem("MeteoWidget") == null || localStorage.getItem("MeteoWidget") == undefined) {
+            return false;
+        }
+        this.getData(localStorage.getItem("MeteoWidget"));
+        return true;
+    }
+
+    save(query: string): void {
+        localStorage.setItem("MeteoWidget", query);
+    }
+
+    getData(query: string): void {
+        Ajax.Get("http://api.openweathermap.org/data/2.5/weather?q=" + query + "&units=metric&appid=b19cfe2f2d3dc28a55fb7261fe36827a", undefined, (res: string) => {
             this.handleData(res);
         });
-        
     }
 
     handleData(res: string): void {
@@ -52,6 +70,7 @@ class MeteoWidget extends Widget {
                 Humidité: <span class='k'>"+ data.main.humidity + "</span><br>\
                 Description: <span class='k'>"+ data.weather[0].description + "</span><br><br>\
             ";
+        this.save(data.name);
         var back = document.createElement("button");
         back.innerHTML = "Retour";
         back.addEventListener("click", () => { this.showForm() });

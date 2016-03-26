@@ -41,11 +41,8 @@ class Widget {
         this.onCreate();
     }
 
-    load(): void {
-
-    }
-
-    save(): void {
+    load(): boolean {
+        return true;
     }
 
     intersects(x: number, y: number, w: number,  h: number) : boolean {

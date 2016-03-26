@@ -25,8 +25,7 @@ var Widget = (function () {
         this.onCreate();
     }
     Widget.prototype.load = function () {
-    };
-    Widget.prototype.save = function () {
+        return true;
     };
     Widget.prototype.intersects = function (x, y, w, h) {
         if (this.x + this.width >= x && this.x <= x + w && this.y + this.height >= y && this.y <= y + h) {
