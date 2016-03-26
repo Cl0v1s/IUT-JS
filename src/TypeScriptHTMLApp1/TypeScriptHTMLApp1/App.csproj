@@ -22,6 +22,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="index.html" />
+    <Content Include="bg.jpg" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -33,6 +34,7 @@
     <TypeScriptCompile Include="MeteoWidget.ts" />
     <TypeScriptCompile Include="PictureWidget.ts" />
     <TypeScriptCompile Include="SportWidget.ts" />
+    <TypeScriptCompile Include="twitter.d.ts" />
     <TypeScriptCompile Include="TwitterWidget.ts" />
     <TypeScriptCompile Include="Widget.ts" />
     <TypeScriptCompile Include="WidgetManager.ts" />

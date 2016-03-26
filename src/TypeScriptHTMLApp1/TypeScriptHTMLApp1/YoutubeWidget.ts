@@ -28,9 +28,11 @@ class YoutubeWidget extends Widget {
         var search: string = ((<HTMLInputElement>this.content.getElementsByTagName("input")[0]).value);
         if (search == "")
             return;
+        var header = {};
+        //header["X-GData-Key"] = "AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs";
         Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + search, null, (data: string) => {
             this.handleResult(this, data);
-        });
+        },null, header);
     }
 
     handleResult(self: YoutubeWidget, data: string): void {

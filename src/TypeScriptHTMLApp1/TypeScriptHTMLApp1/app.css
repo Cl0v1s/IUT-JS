@@ -12,7 +12,7 @@ html, body
 body {
     font-family: 'Segoe UI', sans-serif;
     background-color: #3B3A32;
-    background-image: url("https://static.pexels.com/photos/30732/pexels-photo-30732.jpg");
+    background-image: url("./bg.jpg");
     background-size: cover;
     background-repeat: no-repeat;
     overflow-x:hidden;

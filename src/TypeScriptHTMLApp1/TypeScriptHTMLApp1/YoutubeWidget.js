@@ -34,9 +34,11 @@ var YoutubeWidget = (function (_super) {
         var search = (this.content.getElementsByTagName("input")[0].value);
         if (search == "")
             return;
+        var header = {};
+        //header["X-GData-Key"] = "AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs";
         Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + search, null, function (data) {
             _this.handleResult(_this, data);
-        });
+        }, null, header);
     };
     YoutubeWidget.prototype.handleResult = function (self, data) {
         var result = JSON.parse(data);

@@ -34,6 +34,7 @@ class WidgetManager {
             this.node.onmouseup = () => {
                 this.onDragStop();
             };
+
             setInterval(() => {
                 this.update();
             }, 50);

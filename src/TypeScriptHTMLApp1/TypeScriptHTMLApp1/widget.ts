@@ -41,6 +41,13 @@ class Widget {
         this.onCreate();
     }
 
+    load(): void {
+
+    }
+
+    save(): void {
+    }
+
     intersects(x: number, y: number, w: number,  h: number) : boolean {
         if (this.x + this.width >= x && this.x <= x + w && this.y + this.height >= y && this.y <= y + h) {
             return true;

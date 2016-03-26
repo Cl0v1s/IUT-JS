@@ -24,6 +24,10 @@ var Widget = (function () {
         this.canScroll(false);
         this.onCreate();
     }
+    Widget.prototype.load = function () {
+    };
+    Widget.prototype.save = function () {
+    };
     Widget.prototype.intersects = function (x, y, w, h) {
         if (this.x + this.width >= x && this.x <= x + w && this.y + this.height >= y && this.y <= y + h) {
             return true;
@@ -160,4 +164,4 @@ var Widget = (function () {
     };
     return Widget;
 }());
-//# sourceMappingURL=widget.js.map
+//# sourceMappingURL=Widget.js.map
