@@ -12,7 +12,8 @@ var MapsWidget = (function (_super) {
         this.width = 350;
         this.height = 70;
         this.name = "Maps";
-        this.showForm();
+        if (!this.load())
+            this.showForm();
         _super.prototype.onCreate.call(this);
     };
     MapsWidget.prototype.showForm = function () {
@@ -32,7 +33,18 @@ var MapsWidget = (function (_super) {
         var search = this.content.getElementsByTagName("input")[0].value;
         if (search == "")
             return;
+        this.save(search);
         this.showMap(search);
+    };
+    MapsWidget.prototype.load = function () {
+        if (localStorage.getItem("MapsWidget") == null || localStorage.getItem("MapsWidget") == undefined) {
+            return false;
+        }
+        this.showMap(localStorage.getItem("MapsWidget"));
+        return true;
+    };
+    MapsWidget.prototype.save = function (query) {
+        localStorage.setItem("MapsWidget", query);
     };
     MapsWidget.prototype.showMap = function (data) {
         var _this = this;

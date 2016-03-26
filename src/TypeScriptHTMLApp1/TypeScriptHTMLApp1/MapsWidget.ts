@@ -4,7 +4,8 @@
         this.width = 350;
         this.height = 70;
         this.name = "Maps";
-        this.showForm();
+        if(!this.load())
+            this.showForm();
         super.onCreate();
     }
 
@@ -25,7 +26,20 @@
         var search: string = (<HTMLInputElement>this.content.getElementsByTagName("input")[0]).value;
         if (search == "")
             return;
+        this.save(search);
         this.showMap(search);
+    }
+
+    load(): boolean {
+        if (localStorage.getItem("MapsWidget") == null || localStorage.getItem("MapsWidget") == undefined) {
+            return false;
+        }
+        this.showMap(localStorage.getItem("MapsWidget"));
+        return true;
+    }
+
+    save(query: string): void {
+        localStorage.setItem("MapsWidget", query);
     }
 
     showMap(data: string): void {
