@@ -7,7 +7,8 @@ class YoutubeWidget extends Widget {
         this.name = "Youtube";
         this.width = 350;
         this.height = 70;
-        this.showForm();
+        if(!this.load())
+            this.showForm();
         super.onCreate();
     }
 
@@ -28,11 +29,26 @@ class YoutubeWidget extends Widget {
         var search: string = ((<HTMLInputElement>this.content.getElementsByTagName("input")[0]).value);
         if (search == "")
             return;
-        var header = {};
-        //header["X-GData-Key"] = "AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs";
-        Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + search, null, (data: string) => {
+        this.save(search);
+        this.getData(search);
+    }
+
+    save(video : any): void {
+        localStorage.setItem("YoutubeWidget", JSON.stringify(video));
+    }
+
+    load(): boolean {
+        if (localStorage.getItem("YoutubeWidget") == null || localStorage.getItem("YoutubeWidget") == undefined) {
+            return false;
+        }
+        this.showVideo(JSON.parse(localStorage.getItem("YoutubeWidget")));
+        return true;
+    }
+
+    getData(query: string): void {
+        Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + query, null, (data: string) => {
             this.handleResult(this, data);
-        },null, header);
+        });
     }
 
     handleResult(self: YoutubeWidget, data: string): void {
@@ -72,7 +88,7 @@ class YoutubeWidget extends Widget {
     }
 
     showVideo(video: any): void {
-        console.log(video);
+        this.save(video);
         this.setSize(350, 380);
         var link: string = video.id.videoId;
         var content: HTMLDivElement = document.createElement("div");

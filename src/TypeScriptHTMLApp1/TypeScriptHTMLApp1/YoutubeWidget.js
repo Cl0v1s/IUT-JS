@@ -13,7 +13,8 @@ var YoutubeWidget = (function (_super) {
         this.name = "Youtube";
         this.width = 350;
         this.height = 70;
-        this.showForm();
+        if (!this.load())
+            this.showForm();
         _super.prototype.onCreate.call(this);
     };
     YoutubeWidget.prototype.showForm = function () {
@@ -30,15 +31,27 @@ var YoutubeWidget = (function (_super) {
         this.setContent(content);
     };
     YoutubeWidget.prototype.handleForm = function () {
-        var _this = this;
         var search = (this.content.getElementsByTagName("input")[0].value);
         if (search == "")
             return;
-        var header = {};
-        //header["X-GData-Key"] = "AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs";
-        Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + search, null, function (data) {
+        this.save(search);
+        this.getData(search);
+    };
+    YoutubeWidget.prototype.save = function (video) {
+        localStorage.setItem("YoutubeWidget", JSON.stringify(video));
+    };
+    YoutubeWidget.prototype.load = function () {
+        if (localStorage.getItem("YoutubeWidget") == null || localStorage.getItem("YoutubeWidget") == undefined) {
+            return false;
+        }
+        this.showVideo(JSON.parse(localStorage.getItem("YoutubeWidget")));
+        return true;
+    };
+    YoutubeWidget.prototype.getData = function (query) {
+        var _this = this;
+        Ajax.Get("https://www.googleapis.com/youtube/v3/search?key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs&part=snippet&q=" + query, null, function (data) {
             _this.handleResult(_this, data);
-        }, null, header);
+        });
     };
     YoutubeWidget.prototype.handleResult = function (self, data) {
         var result = JSON.parse(data);
@@ -71,7 +84,7 @@ var YoutubeWidget = (function (_super) {
     };
     YoutubeWidget.prototype.showVideo = function (video) {
         var _this = this;
-        console.log(video);
+        this.save(video);
         this.setSize(350, 380);
         var link = video.id.videoId;
         var content = document.createElement("div");
