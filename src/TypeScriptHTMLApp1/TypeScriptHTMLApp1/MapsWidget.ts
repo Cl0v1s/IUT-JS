@@ -46,7 +46,7 @@
         this.setSize(350, 390);
         var div: HTMLDivElement = document.createElement("div");
         div.style.textAlign = "center";
-        div.innerHTML = '<iframe width="325" height="325" frameborder="0" style="border: 0" src = "https://www.google.com/maps/embed/v1/place?q='+data+'&key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs" allowfullscreen> </iframe>';
+        div.innerHTML = '<iframe width="325" height="325" frameborder="0" style="border: 0" src = "https://www.google.com/maps/embed/v1/directions?origin=here&destination=place_id:ChIJOxKo77zYVA0RluQVWxti6ic&key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs" allowfullscreen> </iframe>';
         var button: HTMLButtonElement = document.createElement("button");
         button.innerHTML = "Retour";
         button.addEventListener("click", () => {

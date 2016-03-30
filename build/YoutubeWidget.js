@@ -74,7 +74,8 @@ var YoutubeWidget = (function (_super) {
      * 
      */
     YoutubeWidget.prototype.load = function () {
-        if (localStorage.getItem("YoutubeWidget") == null || localStorage.getItem("YoutubeWidget") == undefined) {
+        console.log(localStorage.getItem("YoutubeWidget"));
+        if (localStorage.getItem("YoutubeWidget") == null || localStorage.getItem("YoutubeWidget") == undefined || localStorage.getItem("YoutubeWidget") == "undefined") {
             return false;
         }
         this.showVideo(JSON.parse(localStorage.getItem("YoutubeWidget")));
@@ -145,6 +146,12 @@ var YoutubeWidget = (function (_super) {
      */
     YoutubeWidget.prototype.showVideo = function (video) {
         var _this = this;
+        if(video.id == undefined)
+        {
+            alert("Impossible de trouver la video.");
+            localStorage.setItem("YoutubeWidget", undefined);
+            return;
+        }
         this.save(video);
         this.setSize(350, 380);
         var link = video.id.videoId;

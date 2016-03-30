@@ -160,7 +160,7 @@ var Widget = (function () {
      * appelé lors de la suppression du widget
      */
     Widget.prototype.onDelete = function () {
-        if (this.div != undefined && this.parent != undefined)
+        if (this.parent != undefined)
             this.parent.removeChild(this.div);
     };
 

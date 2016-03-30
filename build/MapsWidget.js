@@ -22,39 +22,8 @@ var MapsWidget = (function (_super) {
         this.width = 350;
         this.height = 70;
         this.name = "Maps";
-        if (!this.load())
-            this.showForm();
+        this.showMap();
         _super.prototype.onCreate.call(this);
-    };
-
-    /**
-     * showForm
-     * Affiche le formulaire permettant de choisir le nom de la zone à afficher
-     */
-    MapsWidget.prototype.showForm = function () {
-        var _this = this;
-        this.setSize(350, 70);
-        var div = document.createElement("div");
-        div.innerHTML = "<input type='text' placeholder='Entrez une ville...'>";
-        var button = document.createElement("button");
-        button.innerHTML = "Envoyer";
-        button.addEventListener("click", function () {
-            _this.handleForm();
-        });
-        div.appendChild(button);
-        this.setContent(div);
-    };
-
-    /**
-     * handleForm
-     * Traite les informations indiquées dans le formulaire
-     */
-    MapsWidget.prototype.handleForm = function () {
-        var search = this.content.getElementsByTagName("input")[0].value;
-        if (search == "")
-            return;
-        this.save(search);
-        this.showMap(search);
     };
 
     /**
@@ -64,11 +33,7 @@ var MapsWidget = (function (_super) {
      * 
      */
     MapsWidget.prototype.load = function () {
-        if (localStorage.getItem("MapsWidget") == null || localStorage.getItem("MapsWidget") == undefined) {
-            return false;
-        }
-        this.showMap(localStorage.getItem("MapsWidget"));
-        return true;
+        return false;
     };
 
     /**
@@ -77,7 +42,6 @@ var MapsWidget = (function (_super) {
      * @param  {[type]} information à stocker
      */
     MapsWidget.prototype.save = function (query) {
-        localStorage.setItem("MapsWidget", query);
     };
 
 
@@ -86,18 +50,12 @@ var MapsWidget = (function (_super) {
      * Affiche la carte
      * @param  {[type]} Nom de la zone à afficher
      */
-    MapsWidget.prototype.showMap = function (data) {
+    MapsWidget.prototype.showMap = function () {
         var _this = this;
         this.setSize(350, 390);
         var div = document.createElement("div");
         div.style.textAlign = "center";
-        div.innerHTML = '<iframe width="325" height="325" frameborder="0" style="border: 0" src = "https://www.google.com/maps/embed/v1/place?q=' + data + '&key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs" allowfullscreen> </iframe>';
-        var button = document.createElement("button");
-        button.innerHTML = "Retour";
-        button.addEventListener("click", function () {
-            _this.showForm();
-        });
-        div.appendChild(button);
+        div.innerHTML = '<iframe width="325" height="325" frameborder="0" style="border: 0" src = "https://www.google.com/maps/embed/v1/directions?origin=here&destination=place_id:ChIJOxKo77zYVA0RluQVWxti6ic&key=AIzaSyDuDkVffqwVK11LhxZ7iWMYPcsZfIwJuGs" allowfullscreen> </iframe>';
         this.setContent(div);
     };
 
